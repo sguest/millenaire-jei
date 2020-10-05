@@ -18,7 +18,7 @@ public class MillenaireJeiPlugin implements IModPlugin {
     @Override
     public void register(@Nonnull IModRegistry registry) {
         registry.handleRecipes(BuyingRecipeEntry.class, BuyingRecipe::new, BUYING);
-        BuyingRecipeRegistry.getInstance().AddEntry(new BuyingRecipeEntry(new ItemStack(Item.REGISTRY.getObject(new ResourceLocation("minecraft:apple")))));
+        BuyingRecipeRegistry.getInstance().AddEntry(new BuyingRecipeEntry(new ItemStack(Item.REGISTRY.getObject(new ResourceLocation("minecraft:apple"))), 70));
         registry.addRecipes(BuyingRecipeRegistry.getInstance().getBuyingRecipes(), BUYING);
     }
 

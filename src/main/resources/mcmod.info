@@ -11,6 +11,6 @@
   "credits": "Millenaire and JEI development teams",
   "logoFile": "",
   "screenshots": [],
-  "dependencies": []
+  "dependencies": ["jei", "millenaire"]
 }
 ]
