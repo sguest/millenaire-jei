@@ -1,4 +1,4 @@
-package sguest.millenairejei;
+package sguest.millenairejei.util;
 
 import net.minecraft.client.Minecraft;
 

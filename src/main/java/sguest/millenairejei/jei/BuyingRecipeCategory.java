@@ -1,4 +1,4 @@
-package sguest.millenairejei;
+package sguest.millenairejei.jei;
 
 import mezz.jei.api.IGuiHelper;
 import mezz.jei.api.gui.IDrawable;
@@ -7,10 +7,11 @@ import net.minecraft.client.resources.I18n;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import sguest.millenairejei.MillenaireJei;
 import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.gui.IRecipeLayout;
 
-public class BuyingRecipeCategory implements IRecipeCategory<BuyingRecipe> {
+public class BuyingRecipeCategory implements IRecipeCategory<BuyingRecipeWrapper> {
     private final IDrawable background;
     private final IGuiHelper guiHelper;
 
@@ -20,7 +21,7 @@ public class BuyingRecipeCategory implements IRecipeCategory<BuyingRecipe> {
     }
 
     @Override
-    public void setRecipe(IRecipeLayout recipeLayout, BuyingRecipe recipeWrapper, IIngredients ingredients){
+    public void setRecipe(IRecipeLayout recipeLayout, BuyingRecipeWrapper recipeWrapper, IIngredients ingredients){
         recipeLayout.getItemStacks().init(0, true, 1, 1);
         recipeLayout.getItemStacks().set(0, recipeWrapper.getBuyingItem());
     }

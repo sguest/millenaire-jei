@@ -1,4 +1,4 @@
-package sguest.millenairejei;
+package sguest.millenairejei.millenairedata;
 
 import net.minecraft.item.ItemStack;
 

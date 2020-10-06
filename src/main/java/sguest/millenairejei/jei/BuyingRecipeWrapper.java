@@ -1,15 +1,17 @@
-package sguest.millenairejei;
+package sguest.millenairejei.jei;
 
 import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.ingredients.VanillaTypes;
 import mezz.jei.api.recipe.IRecipeWrapper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.item.ItemStack;
+import sguest.millenairejei.millenairedata.BuyingRecipeEntry;
+import sguest.millenairejei.util.DenierHelper;
 
-public class BuyingRecipe implements IRecipeWrapper {
+public class BuyingRecipeWrapper implements IRecipeWrapper {
     private final BuyingRecipeEntry recipeEntry;
 
-    public BuyingRecipe(BuyingRecipeEntry recipeEntry) {
+    public BuyingRecipeWrapper(BuyingRecipeEntry recipeEntry) {
         this.recipeEntry = recipeEntry;
     }
 

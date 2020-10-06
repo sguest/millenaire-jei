@@ -1,4 +1,4 @@
-package sguest.millenairejei;
+package sguest.millenairejei.millenairedata;
 
 import java.util.ArrayList;
 import java.util.HashMap;
