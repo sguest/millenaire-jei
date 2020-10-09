@@ -2,19 +2,19 @@ package sguest.millenairejei.millenairedata;
 
 import net.minecraft.item.ItemStack;
 
-public class BuyingRecipeEntry {
-    private ItemStack buyingItem;
+public class RecipeData {
+    private ItemStack tradeItem;
     private int cost;
     private String shopName;
 
-    public BuyingRecipeEntry(ItemStack buyingItem, int cost, String shopName) {
-        this.buyingItem = buyingItem;
+    public RecipeData(ItemStack tradeItem, int cost, String shopName) {
+        this.tradeItem = tradeItem;
         this.cost = cost;
         this.shopName = shopName;
     }
 
-    public ItemStack GetBuyingItem() {
-        return buyingItem;
+    public ItemStack GetTradeItem() {
+        return tradeItem;
     }
 
     public int getCost() {

@@ -17,10 +17,12 @@ import net.minecraft.client.Minecraft;
 import sguest.millenairejei.MillenaireJei;
 
 public class CultureData {
-    private List<BuyingRecipeEntry> buyingRecipes;
+    private List<RecipeData> buyingRecipes;
+    private List<RecipeData> sellingRecipes;
 
-    private CultureData(List<BuyingRecipeEntry> buyingRecipes) {
+    private CultureData(List<RecipeData> buyingRecipes, List<RecipeData> sellingRecipes) {
         this.buyingRecipes = buyingRecipes;
+        this.sellingRecipes = sellingRecipes;
     }
 
     public static CultureData loadCulture(String cultureKey, Path configRoot) {
@@ -85,7 +87,8 @@ public class CultureData {
 
         Path shopsFolder = cultureFolder.resolve("shops");
 
-        List<BuyingRecipeEntry> buyingRecipes = new ArrayList<BuyingRecipeEntry>();
+        List<RecipeData> buyingRecipes = new ArrayList<RecipeData>();
+        List<RecipeData> sellingRecipes = new ArrayList<RecipeData>();
 
         ItemLookup itemLookup = ItemLookup.getInstance();
         
@@ -108,10 +111,10 @@ public class CultureData {
 
                         for(String item: items) {
                             if(transactionType.equalsIgnoreCase("sells") && sellingPrices.containsKey(item)) {
-                                buyingRecipes.add(new BuyingRecipeEntry(itemLookup.getItem(item), sellingPrices.get(item), shopName));
+                                buyingRecipes.add(new RecipeData(itemLookup.getItem(item), sellingPrices.get(item), shopName));
                             }
                             else if((transactionType.equalsIgnoreCase("buys") || transactionType.equalsIgnoreCase("buysoptional")) && buyingPrices.containsKey(item)) {
-                                
+                                sellingRecipes.add(new RecipeData(itemLookup.getItem(item), buyingPrices.get(item), shopName));
                             }
                         }
                     }
@@ -121,11 +124,15 @@ public class CultureData {
             }
         }
 
-        return new CultureData(buyingRecipes);
+        return new CultureData(buyingRecipes, sellingRecipes);
     }
 
-    public List<BuyingRecipeEntry> getBuyingRecipes() {
+    public List<RecipeData> getBuyingRecipes() {
         return buyingRecipes;
+    }
+
+    public List<RecipeData> getSellingRecipes() {
+        return sellingRecipes;
     }
 
     private static int parsePrice(String priceString) {

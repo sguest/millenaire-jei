@@ -45,7 +45,11 @@ public class MillenaireDataRegistry {
         }
     }
 
-    public List<BuyingRecipeEntry> getBuyingRecipes() {
+    public List<RecipeData> getBuyingRecipes() {
         return cultureMap.values().stream().flatMap(culture -> culture.getBuyingRecipes().stream()).collect(Collectors.toList());
+    }
+    
+    public List<RecipeData> getSellingRecipes() {
+        return cultureMap.values().stream().flatMap(culture -> culture.getSellingRecipes().stream()).collect(Collectors.toList());
     }
 }

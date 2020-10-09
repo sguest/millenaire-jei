@@ -9,21 +9,21 @@ import sguest.millenairejei.util.ItemHelper;
 import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.gui.IRecipeLayout;
 
-public class BuyingRecipeCategory implements IRecipeCategory<BuyingRecipeWrapper> {
+public class SellingRecipeCategory implements IRecipeCategory<SellingRecipeWrapper> {
     private final IDrawable background;
     private final String title;
     private final IDrawable icon;
 
-    public BuyingRecipeCategory(IGuiHelper guiHelper) {
+    public SellingRecipeCategory(IGuiHelper guiHelper) {
         background = guiHelper.createBlankDrawable(180, 50);
-        title = I18n.format("millenairejei.buyingrecipes.tabtitle");
-        icon = guiHelper.createDrawableIngredient(ItemHelper.getStackFromResource("millenaire:denieror"));
+        title = I18n.format("millenairejei.sellingrecipes.tabtitle");
+        icon = guiHelper.createDrawableIngredient(ItemHelper.getStackFromResource("millenaire:denierargent"));
     }
 
     @Override
-    public void setRecipe(IRecipeLayout recipeLayout, BuyingRecipeWrapper recipeWrapper, IIngredients ingredients){
-        recipeLayout.getItemStacks().init(0, true, 50, 15);
-        recipeLayout.getItemStacks().set(0, recipeWrapper.getBuyingItem());
+    public void setRecipe(IRecipeLayout recipeLayout, SellingRecipeWrapper recipeWrapper, IIngredients ingredients){
+        recipeLayout.getItemStacks().init(0, true, 1, 15);
+        recipeLayout.getItemStacks().set(0, recipeWrapper.getSellingItem());
     }
 
     @Override
@@ -43,7 +43,7 @@ public class BuyingRecipeCategory implements IRecipeCategory<BuyingRecipeWrapper
 
     @Override
     public String getUid() {
-        return MillenaireJei.MODID + ".buying";
+        return MillenaireJei.MODID + ".selling";
     }
 
     @Override
