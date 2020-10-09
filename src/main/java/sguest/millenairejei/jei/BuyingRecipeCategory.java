@@ -22,7 +22,7 @@ public class BuyingRecipeCategory implements IRecipeCategory<BuyingRecipeWrapper
 
     @Override
     public void setRecipe(IRecipeLayout recipeLayout, BuyingRecipeWrapper recipeWrapper, IIngredients ingredients){
-        recipeLayout.getItemStacks().init(0, true, 1, 1);
+        recipeLayout.getItemStacks().init(0, true, 1, 15);
         recipeLayout.getItemStacks().set(0, recipeWrapper.getBuyingItem());
     }
 

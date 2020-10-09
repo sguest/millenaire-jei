@@ -5,12 +5,9 @@ import mezz.jei.api.IModPlugin;
 import mezz.jei.api.IModRegistry;
 import mezz.jei.api.JEIPlugin;
 import mezz.jei.api.recipe.IRecipeCategoryRegistration;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
 import sguest.millenairejei.MillenaireJei;
 import sguest.millenairejei.millenairedata.BuyingRecipeEntry;
-import sguest.millenairejei.millenairedata.BuyingRecipeRegistry;
+import sguest.millenairejei.millenairedata.MillenaireDataRegistry;
 
 import javax.annotation.Nonnull;
 
@@ -21,8 +18,10 @@ public class MillenaireJeiPlugin implements IModPlugin {
     @Override
     public void register(@Nonnull IModRegistry registry) {
         registry.handleRecipes(BuyingRecipeEntry.class, BuyingRecipeWrapper::new, BUYING);
-        BuyingRecipeRegistry.getInstance().AddEntry(new BuyingRecipeEntry(new ItemStack(Item.REGISTRY.getObject(new ResourceLocation("minecraft:apple"))), 70));
-        registry.addRecipes(BuyingRecipeRegistry.getInstance().getBuyingRecipes(), BUYING);
+        MillenaireDataRegistry dataRegistry = MillenaireDataRegistry.getInstance();
+        dataRegistry.loadMillenaireData();
+        //BuyingRecipeRegistry.getInstance().AddEntry(new BuyingRecipeEntry(new ItemStack(Item.REGISTRY.getObject(new ResourceLocation("minecraft:apple"))), 70));
+        registry.addRecipes(dataRegistry.getBuyingRecipes(), BUYING);
     }
 
     @Override

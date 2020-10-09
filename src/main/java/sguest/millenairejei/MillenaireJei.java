@@ -4,6 +4,10 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import sguest.millenairejei.millenairedata.MillenaireDataRegistry;
+
+import java.nio.file.Path;
+
 import org.apache.logging.log4j.Logger;
 
 @Mod(modid = MillenaireJei.MODID, name = MillenaireJei.NAME, version = MillenaireJei.VERSION, dependencies="required-after:jei;required-after:millenaire")
@@ -19,7 +23,9 @@ public class MillenaireJei
     public void preInit(FMLPreInitializationEvent event)
     {
         logger = event.getModLog();
-        logger.info("**log dir**" + event.getModConfigurationDirectory());
+        Path configPath = event.getModConfigurationDirectory().toPath();
+        Path millenaireDirectory = configPath.resolve("../mods/millenaire");
+        MillenaireDataRegistry.getInstance().setConfigDirectory(millenaireDirectory);
     }
 
     public static Logger getLogger() {
