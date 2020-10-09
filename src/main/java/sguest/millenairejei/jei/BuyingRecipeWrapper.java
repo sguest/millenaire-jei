@@ -4,7 +4,9 @@ import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.ingredients.VanillaTypes;
 import mezz.jei.api.recipe.IRecipeWrapper;
 import net.minecraft.client.Minecraft;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
 import sguest.millenairejei.millenairedata.BuyingRecipeEntry;
 import sguest.millenairejei.util.DenierHelper;
 
@@ -17,7 +19,7 @@ public class BuyingRecipeWrapper implements IRecipeWrapper {
 
     @Override
     public void getIngredients(IIngredients ingredients) {
-        //ingredients.setInput(VanillaTypes.ITEM, new ItemStack(Item.REGISTRY.getObject(new ResourceLocation("minecraft:cobblestone"))));
+        ingredients.setInput(VanillaTypes.ITEM, new ItemStack(Item.REGISTRY.getObject(new ResourceLocation("millenaire:purse"))));
         ingredients.setOutput(VanillaTypes.ITEM, recipeEntry.GetBuyingItem());
     }
 

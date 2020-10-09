@@ -4,10 +4,8 @@ import mezz.jei.api.IGuiHelper;
 import mezz.jei.api.gui.IDrawable;
 import mezz.jei.api.recipe.IRecipeCategory;
 import net.minecraft.client.resources.I18n;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
 import sguest.millenairejei.MillenaireJei;
+import sguest.millenairejei.util.ItemHelper;
 import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.gui.IRecipeLayout;
 
@@ -48,6 +46,6 @@ public class BuyingRecipeCategory implements IRecipeCategory<BuyingRecipeWrapper
 
     @Override
     public IDrawable getIcon() {
-        return guiHelper.createDrawableIngredient(new ItemStack(Item.REGISTRY.getObject(new ResourceLocation("millenaire:denierargent"))));
+        return guiHelper.createDrawableIngredient(ItemHelper.getStackFromResource("millenaire:denierargent"));
     }
 }

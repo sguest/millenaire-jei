@@ -8,10 +8,9 @@ import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.Map;
 
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
 import sguest.millenairejei.MillenaireJei;
+import sguest.millenairejei.util.ItemHelper;
 
 public class ItemLookup {
     private static ItemLookup instance;
@@ -40,7 +39,7 @@ public class ItemLookup {
                     String key = parts[0];
                     String resource = parts[1];
                     int meta = Integer.parseInt(parts[2]);
-                    itemMap.put(key, new ItemStack(Item.REGISTRY.getObject(new ResourceLocation(resource)), 1, meta));
+                    itemMap.put(key, ItemHelper.getStackFromResourceAndMeta(resource, meta));
                 }
             }
         } catch(IOException ex) {
