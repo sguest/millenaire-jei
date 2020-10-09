@@ -7,7 +7,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.item.ItemStack;
 import sguest.millenairejei.millenairedata.RecipeData;
 import sguest.millenairejei.util.DenierHelper;
-import sguest.millenairejei.util.ItemHelper;
 
 public class BuyingRecipeWrapper implements IRecipeWrapper {
     private final RecipeData recipeEntry;
@@ -18,7 +17,6 @@ public class BuyingRecipeWrapper implements IRecipeWrapper {
 
     @Override
     public void getIngredients(IIngredients ingredients) {
-        ingredients.setInput(VanillaTypes.ITEM, ItemHelper.getStackFromResource("millenaire:purse"));
         ingredients.setOutput(VanillaTypes.ITEM, recipeEntry.GetTradeItem());
     }
 
@@ -29,6 +27,6 @@ public class BuyingRecipeWrapper implements IRecipeWrapper {
     @Override
     public void drawInfo(Minecraft minecraft, int recipeWidth, int recipeHeight, int mouseX, int mouseY) {
         minecraft.fontRenderer.drawString(recipeEntry.getShopName(), 1, 1, 0xFFFFFFFF);
-        DenierHelper.drawPrice(minecraft, recipeEntry.getCost(), 1, 21);
+        DenierHelper.drawPrice(minecraft, recipeEntry.getCost(), 20, 21);
     }
 }

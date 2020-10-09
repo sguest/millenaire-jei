@@ -8,6 +8,7 @@ import mezz.jei.api.recipe.IRecipeCategoryRegistration;
 import sguest.millenairejei.MillenaireJei;
 import sguest.millenairejei.millenairedata.RecipeData;
 import sguest.millenairejei.millenairedata.MillenaireDataRegistry;
+import sguest.millenairejei.util.Constants;
 import sguest.millenairejei.util.ItemHelper;
 
 import javax.annotation.Nonnull;
@@ -22,10 +23,10 @@ public class MillenaireJeiPlugin implements IModPlugin {
         registry.handleRecipes(RecipeData.class, BuyingRecipeWrapper::new, BUYING);
         registry.handleRecipes(RecipeData.class, SellingRecipeWrapper::new, SELLING);
 
-        registry.addRecipeCatalyst(ItemHelper.getStackFromResource("millenaire:purse"), BUYING);
-        registry.addRecipeCatalyst(ItemHelper.getStackFromResource("millenaire:denier"), BUYING);
-        registry.addRecipeCatalyst(ItemHelper.getStackFromResource("millenaire:denierargent"), BUYING);
-        registry.addRecipeCatalyst(ItemHelper.getStackFromResource("millenaire:denieror"), BUYING);
+        registry.addRecipeCatalyst(ItemHelper.getStackFromResource(Constants.DENIER_POUCH), BUYING);
+        registry.addRecipeCatalyst(ItemHelper.getStackFromResource(Constants.DENIER), BUYING);
+        registry.addRecipeCatalyst(ItemHelper.getStackFromResource(Constants.DENIER_ARGENT), BUYING);
+        registry.addRecipeCatalyst(ItemHelper.getStackFromResource(Constants.DENIER_OR), BUYING);
 
         MillenaireDataRegistry dataRegistry = MillenaireDataRegistry.getInstance();
         dataRegistry.loadMillenaireData();

@@ -9,6 +9,7 @@ import mezz.jei.api.recipe.IRecipeWrapper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.item.ItemStack;
 import sguest.millenairejei.millenairedata.RecipeData;
+import sguest.millenairejei.util.Constants;
 import sguest.millenairejei.util.DenierHelper;
 import sguest.millenairejei.util.ItemHelper;
 
@@ -23,10 +24,10 @@ public class SellingRecipeWrapper implements IRecipeWrapper {
     public void getIngredients(IIngredients ingredients) {
         ingredients.setInput(VanillaTypes.ITEM, recipeEntry.GetTradeItem());
         List<ItemStack> outputs = new ArrayList<ItemStack>();
-        outputs.add(ItemHelper.getStackFromResource("millenaire:purse"));
-        outputs.add(ItemHelper.getStackFromResource("millenaire:denier"));
-        outputs.add(ItemHelper.getStackFromResource("millenaire:denierargent"));
-        outputs.add(ItemHelper.getStackFromResource("millenaire:denieror"));
+        outputs.add(ItemHelper.getStackFromResource(Constants.DENIER_POUCH));
+        outputs.add(ItemHelper.getStackFromResource(Constants.DENIER));
+        outputs.add(ItemHelper.getStackFromResource(Constants.DENIER_ARGENT));
+        outputs.add(ItemHelper.getStackFromResource(Constants.DENIER_OR));
         ingredients.setOutputs(VanillaTypes.ITEM, outputs);
     }
 
@@ -37,6 +38,6 @@ public class SellingRecipeWrapper implements IRecipeWrapper {
     @Override
     public void drawInfo(Minecraft minecraft, int recipeWidth, int recipeHeight, int mouseX, int mouseY) {
         minecraft.fontRenderer.drawString(recipeEntry.getShopName(), 1, 1, 0xFFFFFFFF);
-        DenierHelper.drawPrice(minecraft, recipeEntry.getCost(), 20, 21);
+        DenierHelper.drawPrice(minecraft, recipeEntry.getCost(), 40, 21);
     }
 }

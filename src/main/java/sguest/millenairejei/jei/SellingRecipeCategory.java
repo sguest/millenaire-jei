@@ -4,7 +4,7 @@ import mezz.jei.api.IGuiHelper;
 import mezz.jei.api.gui.IDrawable;
 import mezz.jei.api.recipe.IRecipeCategory;
 import net.minecraft.client.resources.I18n;
-import sguest.millenairejei.MillenaireJei;
+import sguest.millenairejei.util.Constants;
 import sguest.millenairejei.util.ItemHelper;
 import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.gui.IRecipeLayout;
@@ -17,13 +17,16 @@ public class SellingRecipeCategory implements IRecipeCategory<SellingRecipeWrapp
     public SellingRecipeCategory(IGuiHelper guiHelper) {
         background = guiHelper.createBlankDrawable(180, 50);
         title = I18n.format("millenairejei.sellingrecipes.tabtitle");
-        icon = guiHelper.createDrawableIngredient(ItemHelper.getStackFromResource("millenaire:denierargent"));
+        icon = guiHelper.createDrawableIngredient(ItemHelper.getStackFromResource(Constants.DENIER_ARGENT));
     }
 
     @Override
     public void setRecipe(IRecipeLayout recipeLayout, SellingRecipeWrapper recipeWrapper, IIngredients ingredients){
         recipeLayout.getItemStacks().init(0, true, 1, 15);
         recipeLayout.getItemStacks().set(0, recipeWrapper.getSellingItem());
+
+        recipeLayout.getItemStacks().init(1, false, 20, 15);
+        recipeLayout.getItemStacks().set(1, ItemHelper.getStackFromResource(Constants.DENIER_POUCH));
     }
 
     @Override
@@ -33,7 +36,7 @@ public class SellingRecipeCategory implements IRecipeCategory<SellingRecipeWrapp
 
     @Override
     public String getModName() {
-        return "Millenaire";
+        return Constants.RECIPE_MOD_DISPLAY;
     }
 
     @Override
@@ -43,7 +46,7 @@ public class SellingRecipeCategory implements IRecipeCategory<SellingRecipeWrapp
 
     @Override
     public String getUid() {
-        return MillenaireJei.MODID + ".selling";
+        return MillenaireJeiPlugin.SELLING;
     }
 
     @Override
