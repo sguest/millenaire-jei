@@ -38,6 +38,6 @@ public class SellingRecipeWrapper implements IRecipeWrapper {
     @Override
     public void drawInfo(Minecraft minecraft, int recipeWidth, int recipeHeight, int mouseX, int mouseY) {
         minecraft.fontRenderer.drawString(recipeEntry.getShopName(), 1, 1, 0xFFFFFFFF);
-        DenierHelper.drawPrice(minecraft, recipeEntry.getCost(), 40, 21);
+        DenierHelper.drawPrice(minecraft, recipeEntry.getCost(), 65, 21);
     }
 }
