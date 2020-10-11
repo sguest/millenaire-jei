@@ -56,35 +56,6 @@ public class CultureData {
         }
 
         Path cultureFolder = configRoot.resolve("cultures/" + cultureKey);
-        File tradedFile = cultureFolder.resolve("traded_goods.txt").toFile();
-
-        Map<String, Integer> buyingPrices = new TreeMap<>();
-        Map<String, Integer> sellingPrices = new TreeMap<>();
-        
-        try (BufferedReader reader = new BufferedReader(new FileReader(tradedFile))) {
-            String line;
-            while((line = reader.readLine()) != null) {
-                line = line.trim();
-                if(line.length() > 0 && !line.startsWith("//")) {
-                    String[] values = line.split(",");
-                    String itemKey = values[0];
-                    int sellingPrice = parsePrice(values[1]);
-                    int buyingPrice = parsePrice(values[2]);
-
-                    if(sellingPrice > 0) {
-                        sellingPrices.put(itemKey, sellingPrice);
-                    }
-
-                    if(buyingPrice > 0) {
-                        buyingPrices.put(itemKey, buyingPrice);
-                    }
-                }
-            }
-        } catch(IOException ex) {
-            MillenaireJei.getLogger().warn("Could not load trading information for culture " + cultureKey);
-            return null;
-        }
-
         Path shopsFolder = cultureFolder.resolve("shops");
 
         List<RecipeData> buyingRecipes = new ArrayList<RecipeData>();
@@ -92,6 +63,8 @@ public class CultureData {
 
         ItemLookup itemLookup = ItemLookup.getInstance();
         
+        CultureTradedGoods tradedGoods = TradedGoodsLookup.getInstance().getCulture(cultureKey);
+
         File[] shopFiles = shopsFolder.toFile().listFiles();
         for (File shopFile : shopFiles) {
             String shopKey = FilenameUtils.getBaseName(shopFile.getName());
@@ -110,11 +83,14 @@ public class CultureData {
                         String[] items = parts[1].split(",");
 
                         for(String item: items) {
-                            if(transactionType.equalsIgnoreCase("sells") && sellingPrices.containsKey(item)) {
-                                buyingRecipes.add(new RecipeData(itemLookup.getItem(item), sellingPrices.get(item), shopName));
+                            int buyingPrice = tradedGoods.getBuyingPrice(item);
+                            int sellingPrice = tradedGoods.getSellingPrice(item);
+
+                            if(transactionType.equalsIgnoreCase("sells") && sellingPrice > 0) {
+                                buyingRecipes.add(new RecipeData(itemLookup.getItem(item), sellingPrice, shopName));
                             }
-                            else if((transactionType.equalsIgnoreCase("buys") || transactionType.equalsIgnoreCase("buysoptional")) && buyingPrices.containsKey(item)) {
-                                sellingRecipes.add(new RecipeData(itemLookup.getItem(item), buyingPrices.get(item), shopName));
+                            else if((transactionType.equalsIgnoreCase("buys") || transactionType.equalsIgnoreCase("buysoptional")) && buyingPrice > 0) {
+                                sellingRecipes.add(new RecipeData(itemLookup.getItem(item), buyingPrice, shopName));
                             }
                         }
                     }
@@ -133,21 +109,5 @@ public class CultureData {
 
     public List<RecipeData> getSellingRecipes() {
         return sellingRecipes;
-    }
-
-    private static int parsePrice(String priceString) {
-        priceString = priceString.trim();
-        if(priceString.length() == 0) {
-            return 0;
-        }
-        if(priceString.contains("*")) {
-            String[] priceParts = priceString.split("\\*");
-            int value = 1;
-            for(String part : priceParts) {
-                value *= Integer.parseInt(part);
-            }
-            return value;
-        }
-        return Integer.parseInt(priceString);
     }
 }

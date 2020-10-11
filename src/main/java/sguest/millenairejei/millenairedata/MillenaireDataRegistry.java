@@ -38,10 +38,18 @@ public class MillenaireDataRegistry {
         ItemLookup itemLookup = ItemLookup.getInstance();
         for(Path loadingRoot: loadingRoots) {
             itemLookup.loadItems(loadingRoot);
+
+            Path culturesFolder = loadingRoot.resolve("cultures");
+            File[] cultureFiles = culturesFolder.toFile().listFiles();
+            for (File cultureFile : cultureFiles) {
+                if(cultureFile.isDirectory()) {
+                    String cultureKey = cultureFile.getName();
+                    TradedGoodsLookup.getInstance().loadTradedGoods(cultureKey, cultureFile.toPath());
+                }
+            }
         }
 
         Path millenaireDirectory = modsDirectory.resolve("millenaire");
-        ItemLookup.getInstance().loadItems(millenaireDirectory);
 
         Path culturesFolder = millenaireDirectory.resolve("cultures");
         File[] cultureFiles = culturesFolder.toFile().listFiles();
