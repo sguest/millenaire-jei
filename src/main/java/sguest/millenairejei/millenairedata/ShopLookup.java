@@ -26,7 +26,7 @@ public class ShopLookup {
         cultureShopInfo = new TreeMap<>();
     }
 
-    public void LoadShopInfo(String cultureKey, Path cultureFolder) {
+    public void loadShopInfo(String cultureKey, Path cultureFolder) {
         Path shopsFolder = cultureFolder.resolve("shops");
         
         if(shopsFolder.toFile().exists()) {

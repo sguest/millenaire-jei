@@ -46,7 +46,8 @@ public class MillenaireDataRegistry {
                     String cultureKey = cultureFile.getName();
                     Path culturePath = cultureFile.toPath();
                     TradedGoodsLookup.getInstance().loadTradedGoods(cultureKey, culturePath);
-                    ShopLookup.getInstance().LoadShopInfo(cultureKey, culturePath);
+                    ShopLookup.getInstance().loadShopInfo(cultureKey, culturePath);
+                    LanguageLookup.getInstance().loadLanguageData(cultureKey, loadingRoot);
                 }
             }
         }
