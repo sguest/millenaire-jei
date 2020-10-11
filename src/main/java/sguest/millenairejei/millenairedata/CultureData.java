@@ -11,8 +11,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
-import org.apache.commons.io.FilenameUtils;
-
 import net.minecraft.client.Minecraft;
 import sguest.millenairejei.MillenaireJei;
 
@@ -55,48 +53,34 @@ public class CultureData {
             MillenaireJei.getLogger().warn("Could not load language information for culture " + cultureKey);
         }
 
-        Path cultureFolder = configRoot.resolve("cultures/" + cultureKey);
-        Path shopsFolder = cultureFolder.resolve("shops");
-
         List<RecipeData> buyingRecipes = new ArrayList<RecipeData>();
         List<RecipeData> sellingRecipes = new ArrayList<RecipeData>();
 
         ItemLookup itemLookup = ItemLookup.getInstance();
         
         CultureTradedGoods tradedGoods = TradedGoodsLookup.getInstance().getCulture(cultureKey);
+        Map<String, ShopData> shopData = ShopLookup.getInstance().getCultureShops(cultureKey);
 
-        File[] shopFiles = shopsFolder.toFile().listFiles();
-        for (File shopFile : shopFiles) {
-            String shopKey = FilenameUtils.getBaseName(shopFile.getName());
+        for(Map.Entry<String, ShopData> shopEntry : shopData.entrySet()) {
+            String shopKey = shopEntry.getKey();
             String shopName = shopKey;
             if(shopNames.containsKey(shopKey)) {
                 shopName = shopNames.get(shopKey);
             }
             shopName = cultureName + " " + shopName;
-            try (BufferedReader reader = new BufferedReader(new FileReader(shopFile))) {
-                String line;
-                while((line = reader.readLine()) != null) {
-                    line = line.trim();
-                    if(line.contains("=") && !line.startsWith("//")) {
-                        String[] parts = line.split("=");
-                        String transactionType = parts[0];
-                        String[] items = parts[1].split(",");
 
-                        for(String item: items) {
-                            int buyingPrice = tradedGoods.getBuyingPrice(item);
-                            int sellingPrice = tradedGoods.getSellingPrice(item);
-
-                            if(transactionType.equalsIgnoreCase("sells") && sellingPrice > 0) {
-                                buyingRecipes.add(new RecipeData(itemLookup.getItem(item), sellingPrice, shopName));
-                            }
-                            else if((transactionType.equalsIgnoreCase("buys") || transactionType.equalsIgnoreCase("buysoptional")) && buyingPrice > 0) {
-                                sellingRecipes.add(new RecipeData(itemLookup.getItem(item), buyingPrice, shopName));
-                            }
-                        }
-                    }
+            for(String item: shopEntry.getValue().getSoldItems()) {
+                int sellingPrice = tradedGoods.getSellingPrice(item);
+                if(sellingPrice > 0) {
+                    buyingRecipes.add(new RecipeData(itemLookup.getItem(item), sellingPrice, shopName));
                 }
-            } catch(IOException ex) {
-                MillenaireJei.getLogger().warn("Could not load shop information for culture " + cultureKey + " shop " + shopKey);
+            }
+
+            for(String item: shopEntry.getValue().getSoldItems()) {
+                int buyingPrice = tradedGoods.getBuyingPrice(item);
+                if(buyingPrice > 0) {
+                    sellingRecipes.add(new RecipeData(itemLookup.getItem(item), buyingPrice, shopName));
+                }
             }
         }
 
