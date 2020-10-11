@@ -29,21 +29,22 @@ public class ItemLookup {
 
     public void loadItems(Path configRoot) {
         File itemFile = configRoot.resolve("itemlist.txt").toFile();
-
-        try (BufferedReader reader = new BufferedReader(new FileReader(itemFile))) {
-            String line;
-            while((line = reader.readLine()) != null) {
-                line = line.trim();
-                if(line.length() != 0 && !line.startsWith("//")) {
-                    String[] parts = line.split(";");
-                    String key = parts[0];
-                    String resource = parts[1];
-                    int meta = Integer.parseInt(parts[2]);
-                    itemMap.put(key, ItemHelper.getStackFromResourceAndMeta(resource, meta));
+        if(itemFile.exists()) {
+            try (BufferedReader reader = new BufferedReader(new FileReader(itemFile))) {
+                String line;
+                while((line = reader.readLine()) != null) {
+                    line = line.trim();
+                    if(line.length() != 0 && !line.startsWith("//")) {
+                        String[] parts = line.split(";");
+                        String key = parts[0];
+                        String resource = parts[1];
+                        int meta = Integer.parseInt(parts[2]);
+                        itemMap.put(key, ItemHelper.getStackFromResourceAndMeta(resource, meta));
+                    }
                 }
+            } catch(IOException ex) {
+                MillenaireJei.getLogger().error("Could not load item list from " + itemFile);
             }
-        } catch(IOException ex) {
-            MillenaireJei.getLogger().error("Could not load item list");
         }
     }
 

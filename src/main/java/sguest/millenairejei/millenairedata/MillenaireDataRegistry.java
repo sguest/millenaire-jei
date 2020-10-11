@@ -2,6 +2,7 @@ package sguest.millenairejei.millenairedata;
 
 import java.io.File;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -13,7 +14,7 @@ public class MillenaireDataRegistry {
     private static MillenaireDataRegistry instance;
 
     private Map<String, CultureData> cultureMap;
-    private Path configDirectory;
+    private Path modsDirectory;
 
     public static MillenaireDataRegistry getInstance() {
         if (instance == null) {
@@ -26,21 +27,29 @@ public class MillenaireDataRegistry {
         this.cultureMap = new HashMap<>();
     }
 
-    public void setConfigDirectory(Path configDirectory) {
-        this.configDirectory = configDirectory;
+    public void setModsDirectory(Path configDirectory) {
+        this.modsDirectory = configDirectory;
     }
 
     public void loadMillenaireData() {
         MillenaireJei.getLogger().info("Loading millenaire data");
-        ItemLookup.getInstance().loadItems(configDirectory);
+        List<Path> loadingRoots = getLoadingRoots();
 
-        Path culturesFolder = configDirectory.resolve("cultures");
+        ItemLookup itemLookup = ItemLookup.getInstance();
+        for(Path loadingRoot: loadingRoots) {
+            itemLookup.loadItems(loadingRoot);
+        }
+
+        Path millenaireDirectory = modsDirectory.resolve("millenaire");
+        ItemLookup.getInstance().loadItems(millenaireDirectory);
+
+        Path culturesFolder = millenaireDirectory.resolve("cultures");
         File[] cultureFiles = culturesFolder.toFile().listFiles();
         MillenaireJei.getLogger().info("Found " + cultureFiles.length + " cultures");
         for (File cultureFile : cultureFiles) {
             if(cultureFile.isDirectory()) {
                 String cultureKey = cultureFile.getName();
-                cultureMap.put(cultureKey, CultureData.loadCulture(cultureKey, configDirectory));
+                cultureMap.put(cultureKey, CultureData.loadCulture(cultureKey, millenaireDirectory));
             }
         }
     }
@@ -51,5 +60,22 @@ public class MillenaireDataRegistry {
     
     public List<RecipeData> getSellingRecipes() {
         return cultureMap.values().stream().flatMap(culture -> culture.getSellingRecipes().stream()).collect(Collectors.toList());
+    }
+
+    private List<Path> getLoadingRoots() {
+        List<Path> loadingRoots = new ArrayList<Path>();
+        loadingRoots.add(modsDirectory.resolve("millenaire"));
+
+        Path millenaireCustomDirectory = modsDirectory.resolve("millenaire-custom");
+        loadingRoots.add(millenaireCustomDirectory);
+
+        Path modsDirectory = millenaireCustomDirectory.resolve("mods");
+        File[] modDirectories = modsDirectory.toFile().listFiles();
+        for(File modDirectory: modDirectories) {
+            if(modDirectory.isDirectory()) {
+                loadingRoots.add(modDirectory.toPath());
+            }
+        }
+        return loadingRoots;
     }
 }

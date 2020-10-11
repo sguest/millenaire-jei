@@ -24,8 +24,8 @@ public class MillenaireJei
     {
         logger = event.getModLog();
         Path configPath = event.getModConfigurationDirectory().toPath();
-        Path millenaireDirectory = configPath.resolve("../mods/millenaire");
-        MillenaireDataRegistry.getInstance().setConfigDirectory(millenaireDirectory);
+        Path modsDirectory = configPath.resolve("../mods").toAbsolutePath().normalize();
+        MillenaireDataRegistry.getInstance().setModsDirectory(modsDirectory);
     }
 
     public static Logger getLogger() {
