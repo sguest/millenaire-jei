@@ -3,7 +3,7 @@ package sguest.millenairejei.jei;
 import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.ingredients.VanillaTypes;
 import net.minecraft.client.Minecraft;
-import sguest.millenairejei.millenairedata.RecipeData;
+import sguest.millenairejei.recipes.RecipeData;
 import sguest.millenairejei.util.DenierHelper;
 
 public class BuyingRecipeWrapper extends BaseTradingRecipeWrapper {
@@ -13,7 +13,7 @@ public class BuyingRecipeWrapper extends BaseTradingRecipeWrapper {
 
     @Override
     public void getIngredients(IIngredients ingredients) {
-        ingredients.setOutput(VanillaTypes.ITEM, recipeEntry.GetTradeItem());
+        ingredients.setOutput(VanillaTypes.ITEM, recipeEntry.getTradeItem());
     }
 
     @Override

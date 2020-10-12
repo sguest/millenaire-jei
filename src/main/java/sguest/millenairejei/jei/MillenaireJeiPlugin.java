@@ -6,7 +6,8 @@ import mezz.jei.api.IModRegistry;
 import mezz.jei.api.JEIPlugin;
 import mezz.jei.api.recipe.IRecipeCategoryRegistration;
 import sguest.millenairejei.MillenaireJei;
-import sguest.millenairejei.millenairedata.RecipeData;
+import sguest.millenairejei.recipes.RecipeData;
+import sguest.millenairejei.recipes.RecipeLookup;
 import sguest.millenairejei.millenairedata.MillenaireDataRegistry;
 import sguest.millenairejei.util.Constants;
 import sguest.millenairejei.util.ItemHelper;
@@ -28,11 +29,12 @@ public class MillenaireJeiPlugin implements IModPlugin {
         registry.addRecipeCatalyst(ItemHelper.getStackFromResource(Constants.DENIER_ARGENT), BUYING);
         registry.addRecipeCatalyst(ItemHelper.getStackFromResource(Constants.DENIER_OR), BUYING);
 
-        MillenaireDataRegistry dataRegistry = MillenaireDataRegistry.getInstance();
-        dataRegistry.loadMillenaireData();
+        MillenaireDataRegistry.getInstance().loadMillenaireData();
+        RecipeLookup recipeLookup = new RecipeLookup();
+        recipeLookup.buildRecipes();
 
-        registry.addRecipes(dataRegistry.getBuyingRecipes(), BUYING);
-        registry.addRecipes(dataRegistry.getSellingRecipes(), SELLING);
+        registry.addRecipes(recipeLookup.getBuyingRecipes(), BUYING);
+        registry.addRecipes(recipeLookup.getSellingRecipes(), SELLING);
     }
 
     @Override

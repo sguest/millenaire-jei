@@ -3,17 +3,13 @@ package sguest.millenairejei.millenairedata;
 import java.io.File;
 import java.nio.file.Path;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 import sguest.millenairejei.MillenaireJei;
 
 public class MillenaireDataRegistry {
     private static MillenaireDataRegistry instance;
 
-    private Map<String, CultureData> cultureMap;
     private Path modsDirectory;
 
     public static MillenaireDataRegistry getInstance() {
@@ -24,7 +20,6 @@ public class MillenaireDataRegistry {
     }
 
     private MillenaireDataRegistry() {
-        this.cultureMap = new HashMap<>();
     }
 
     public void setModsDirectory(Path configDirectory) {
@@ -36,8 +31,6 @@ public class MillenaireDataRegistry {
         List<Path> loadingRoots = getLoadingRoots();
 
         ItemLookup itemLookup = ItemLookup.getInstance();
-
-        List<String> cultures = new ArrayList<String>();
 
         for(Path loadingRoot: loadingRoots) {
             itemLookup.loadItems(loadingRoot);
@@ -51,24 +44,10 @@ public class MillenaireDataRegistry {
                     TradedGoodsLookup.getInstance().loadTradedGoods(cultureKey, culturePath);
                     ShopLookup.getInstance().loadShopInfo(cultureKey, culturePath);
                     LanguageLookup.getInstance().loadLanguageData(cultureKey, loadingRoot);
-                    if(!cultures.contains(cultureKey)) {
-                        cultures.add(cultureKey);
-                    }
+                    CultureDataLookup.getInstance().loadCultureData(cultureKey, culturePath);
                 }
             }
         }
-
-        for (String culture: cultures) {
-            cultureMap.put(culture, CultureData.loadCulture(culture));
-        }
-    }
-
-    public List<RecipeData> getBuyingRecipes() {
-        return cultureMap.values().stream().flatMap(culture -> culture.getBuyingRecipes().stream()).collect(Collectors.toList());
-    }
-    
-    public List<RecipeData> getSellingRecipes() {
-        return cultureMap.values().stream().flatMap(culture -> culture.getSellingRecipes().stream()).collect(Collectors.toList());
     }
 
     private List<Path> getLoadingRoots() {

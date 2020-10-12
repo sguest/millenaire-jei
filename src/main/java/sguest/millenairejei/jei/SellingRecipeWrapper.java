@@ -7,7 +7,7 @@ import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.ingredients.VanillaTypes;
 import net.minecraft.client.Minecraft;
 import net.minecraft.item.ItemStack;
-import sguest.millenairejei.millenairedata.RecipeData;
+import sguest.millenairejei.recipes.RecipeData;
 import sguest.millenairejei.util.Constants;
 import sguest.millenairejei.util.DenierHelper;
 import sguest.millenairejei.util.ItemHelper;
@@ -19,7 +19,7 @@ public class SellingRecipeWrapper extends BaseTradingRecipeWrapper {
 
     @Override
     public void getIngredients(IIngredients ingredients) {
-        ingredients.setInput(VanillaTypes.ITEM, recipeEntry.GetTradeItem());
+        ingredients.setInput(VanillaTypes.ITEM, recipeEntry.getTradeItem());
         List<ItemStack> outputs = new ArrayList<ItemStack>();
         outputs.add(ItemHelper.getStackFromResource(Constants.DENIER_POUCH));
         outputs.add(ItemHelper.getStackFromResource(Constants.DENIER));
