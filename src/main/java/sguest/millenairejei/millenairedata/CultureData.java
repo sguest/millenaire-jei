@@ -30,7 +30,10 @@ public class CultureData {
         for(Map.Entry<String, ItemShopData> shopEntry : shopData.entrySet()) {
             String itemKey = shopEntry.getKey();
 
-            String cultureName = languageData.getShortName();
+            String cultureName = languageData.getFullName();
+            if(cultureName == null) {
+                cultureName = cultureKey;
+            }
 
             int sellingPrice = tradedGoods.getSellingPrice(itemKey);
             if(sellingPrice > 0) {
