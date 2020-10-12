@@ -36,6 +36,9 @@ public class MillenaireDataRegistry {
         List<Path> loadingRoots = getLoadingRoots();
 
         ItemLookup itemLookup = ItemLookup.getInstance();
+
+        List<String> cultures = new ArrayList<String>();
+
         for(Path loadingRoot: loadingRoots) {
             itemLookup.loadItems(loadingRoot);
 
@@ -48,20 +51,15 @@ public class MillenaireDataRegistry {
                     TradedGoodsLookup.getInstance().loadTradedGoods(cultureKey, culturePath);
                     ShopLookup.getInstance().loadShopInfo(cultureKey, culturePath);
                     LanguageLookup.getInstance().loadLanguageData(cultureKey, loadingRoot);
+                    if(!cultures.contains(cultureKey)) {
+                        cultures.add(cultureKey);
+                    }
                 }
             }
         }
 
-        Path millenaireDirectory = modsDirectory.resolve("millenaire");
-
-        Path culturesFolder = millenaireDirectory.resolve("cultures");
-        File[] cultureFiles = culturesFolder.toFile().listFiles();
-        MillenaireJei.getLogger().info("Found " + cultureFiles.length + " cultures");
-        for (File cultureFile : cultureFiles) {
-            if(cultureFile.isDirectory()) {
-                String cultureKey = cultureFile.getName();
-                cultureMap.put(cultureKey, CultureData.loadCulture(cultureKey, millenaireDirectory));
-            }
+        for (String culture: cultures) {
+            cultureMap.put(culture, CultureData.loadCulture(culture));
         }
     }
 

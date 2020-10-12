@@ -1,6 +1,5 @@
 package sguest.millenairejei.millenairedata;
 
-import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -16,7 +15,7 @@ public class CultureData {
         this.sellingRecipes = sellingRecipes;
     }
 
-    public static CultureData loadCulture(String cultureKey, Path configRoot) {
+    public static CultureData loadCulture(String cultureKey) {
         MillenaireJei.getLogger().info("Loading culture " + cultureKey);
 
         List<RecipeData> buyingRecipes = new ArrayList<RecipeData>();
