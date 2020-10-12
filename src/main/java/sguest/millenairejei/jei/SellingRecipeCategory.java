@@ -18,7 +18,7 @@ public class SellingRecipeCategory implements IRecipeCategory<SellingRecipeWrapp
     private final IDrawable arrow;
 
     public SellingRecipeCategory(IGuiHelper guiHelper) {
-        background = guiHelper.createBlankDrawable(180, 50);
+        background = guiHelper.createBlankDrawable(180, 110);
         title = I18n.format("millenairejei.sellingrecipes.tabtitle");
         icon = guiHelper.createDrawableIngredient(ItemHelper.getStackFromResource(Constants.DENIER_ARGENT));
         arrow = GuiElementHelper.staticArrow(guiHelper);
@@ -27,7 +27,7 @@ public class SellingRecipeCategory implements IRecipeCategory<SellingRecipeWrapp
     @Override
     public void setRecipe(IRecipeLayout recipeLayout, SellingRecipeWrapper recipeWrapper, IIngredients ingredients){
         recipeLayout.getItemStacks().init(0, true, 1, 15);
-        recipeLayout.getItemStacks().set(0, recipeWrapper.getSellingItem());
+        recipeLayout.getItemStacks().set(0, recipeWrapper.getTradeItem());
 
         recipeLayout.getItemStacks().init(1, false, 45, 15);
         recipeLayout.getItemStacks().set(1, ItemHelper.getStackFromResource(Constants.DENIER_POUCH));

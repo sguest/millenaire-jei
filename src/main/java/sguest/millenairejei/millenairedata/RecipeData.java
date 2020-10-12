@@ -1,16 +1,20 @@
 package sguest.millenairejei.millenairedata;
 
+import java.util.List;
+
 import net.minecraft.item.ItemStack;
 
 public class RecipeData {
     private ItemStack tradeItem;
     private int cost;
-    private String shopName;
+    private String cultureName;
+    private List<String> shopNames;
 
-    public RecipeData(ItemStack tradeItem, int cost, String shopName) {
+    public RecipeData(ItemStack tradeItem, int cost, String cultureName, List<String> shopNames) {
         this.tradeItem = tradeItem;
         this.cost = cost;
-        this.shopName = shopName;
+        this.cultureName = cultureName;
+        this.shopNames = shopNames;
     }
 
     public ItemStack GetTradeItem() {
@@ -21,7 +25,11 @@ public class RecipeData {
         return cost;
     }
 
-    public String getShopName() {
-        return shopName;
+    public String getCultureName() {
+        return cultureName;
+    }
+
+    public List<String> getShopNames() {
+        return shopNames;
     }
 }

@@ -5,7 +5,6 @@ import java.util.List;
 
 import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.ingredients.VanillaTypes;
-import mezz.jei.api.recipe.IRecipeWrapper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.item.ItemStack;
 import sguest.millenairejei.millenairedata.RecipeData;
@@ -13,11 +12,9 @@ import sguest.millenairejei.util.Constants;
 import sguest.millenairejei.util.DenierHelper;
 import sguest.millenairejei.util.ItemHelper;
 
-public class SellingRecipeWrapper implements IRecipeWrapper {
-    private final RecipeData recipeEntry;
-
+public class SellingRecipeWrapper extends BaseTradingRecipeWrapper {
     public SellingRecipeWrapper(RecipeData recipeEntry) {
-        this.recipeEntry = recipeEntry;
+        super(recipeEntry);
     }
 
     @Override
@@ -31,13 +28,9 @@ public class SellingRecipeWrapper implements IRecipeWrapper {
         ingredients.setOutputs(VanillaTypes.ITEM, outputs);
     }
 
-    public ItemStack getSellingItem() {
-        return recipeEntry.GetTradeItem();
-    }
-
     @Override
     public void drawInfo(Minecraft minecraft, int recipeWidth, int recipeHeight, int mouseX, int mouseY) {
-        minecraft.fontRenderer.drawString(recipeEntry.getShopName(), 1, 1, 0xFFFFFFFF);
+        super.drawInfo(minecraft, recipeWidth, recipeHeight, mouseX, mouseY);
         DenierHelper.drawPrice(minecraft, recipeEntry.getCost(), 65, 21);
     }
 }

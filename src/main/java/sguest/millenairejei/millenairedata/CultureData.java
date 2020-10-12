@@ -18,35 +18,30 @@ public class CultureData {
     public static CultureData loadCulture(String cultureKey) {
         MillenaireJei.getLogger().info("Loading culture " + cultureKey);
 
-        List<RecipeData> buyingRecipes = new ArrayList<RecipeData>();
-        List<RecipeData> sellingRecipes = new ArrayList<RecipeData>();
+        List<RecipeData> buyingRecipes = new ArrayList<>();
+        List<RecipeData> sellingRecipes = new ArrayList<>();
 
         ItemLookup itemLookup = ItemLookup.getInstance();
         
         CultureTradedGoods tradedGoods = TradedGoodsLookup.getInstance().getCulture(cultureKey);
-        Map<String, ShopData> shopData = ShopLookup.getInstance().getCultureShops(cultureKey);
+        Map<String, ItemShopData> shopData = ShopLookup.getInstance().getCultureShops(cultureKey);
         CultureLanguageData languageData = LanguageLookup.getInstance().getLanguageData(cultureKey);
 
-        for(Map.Entry<String, ShopData> shopEntry : shopData.entrySet()) {
-            String shopKey = shopEntry.getKey();
-            String shopName = languageData.getShopName(shopKey);
-            if(shopName == null) {
-                shopName = shopKey;
-            }
-            shopName = languageData.getShortName() + " " + shopName;
+        for(Map.Entry<String, ItemShopData> shopEntry : shopData.entrySet()) {
+            String itemKey = shopEntry.getKey();
 
-            for(String item: shopEntry.getValue().getSoldItems()) {
-                int sellingPrice = tradedGoods.getSellingPrice(item);
-                if(sellingPrice > 0) {
-                    buyingRecipes.add(new RecipeData(itemLookup.getItem(item), sellingPrice, shopName));
-                }
+            String cultureName = languageData.getShortName();
+
+            int sellingPrice = tradedGoods.getSellingPrice(itemKey);
+            if(sellingPrice > 0) {
+                List<String> shopNames = getShopNames(shopEntry.getValue().getBuyingShops(), languageData);
+                buyingRecipes.add(new RecipeData(itemLookup.getItem(itemKey), sellingPrice, cultureName, shopNames));
             }
 
-            for(String item: shopEntry.getValue().getSoldItems()) {
-                int buyingPrice = tradedGoods.getBuyingPrice(item);
-                if(buyingPrice > 0) {
-                    sellingRecipes.add(new RecipeData(itemLookup.getItem(item), buyingPrice, shopName));
-                }
+            int buyingPrice = tradedGoods.getBuyingPrice(itemKey);
+            if(buyingPrice > 0) {
+                List<String> shopNames = getShopNames(shopEntry.getValue().getSellingShops(), languageData);
+                sellingRecipes.add(new RecipeData(itemLookup.getItem(itemKey), buyingPrice, cultureName, shopNames));
             }
         }
 
@@ -59,5 +54,16 @@ public class CultureData {
 
     public List<RecipeData> getSellingRecipes() {
         return sellingRecipes;
+    }
+
+    private static List<String> getShopNames(List<String> shopKeys, CultureLanguageData languageData) {
+        List<String> shopNames = new ArrayList<>();
+
+        for(String shopKey : shopKeys) {
+            String shopName = languageData.getShopName(shopKey);
+            shopNames.add(shopName == null ? shopKey : shopName);
+        }
+
+        return shopNames;
     }
 }

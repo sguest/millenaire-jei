@@ -2,7 +2,6 @@ package sguest.millenairejei.millenairedata;
 
 import java.io.File;
 import java.nio.file.Path;
-import java.util.Collections;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -13,7 +12,7 @@ import sguest.millenairejei.util.DataFileHelper;
 public class ShopLookup {
     private static ShopLookup instance;
 
-    private Map<String, Map<String, ShopData>> cultureShopInfo;
+    private Map<String, Map<String, ItemShopData>> cultureShopInfo;
 
     public static ShopLookup getInstance() {
         if(instance == null) {
@@ -30,7 +29,7 @@ public class ShopLookup {
         Path shopsFolder = cultureFolder.resolve("shops");
         
         if(shopsFolder.toFile().exists()) {
-            Map<String, ShopData> cultureShops = cultureShopInfo.get(cultureKey);
+            Map<String, ItemShopData> cultureShops = cultureShopInfo.get(cultureKey);
             if(cultureShops == null) {
                 cultureShops = new TreeMap<>();
                 cultureShopInfo.put(cultureKey, cultureShops);
@@ -41,16 +40,18 @@ public class ShopLookup {
                 String shopKey = FilenameUtils.getBaseName(shopFile.getName());
                 Map<String, String> shopFileData = DataFileHelper.loadDataFile(shopFile);
                 if(shopFileData != null) {
-                    ShopData shopData = new ShopData();
+                    ItemShopData shopData = new ItemShopData();
 
                     for(Map.Entry<String, String> entry : shopFileData.entrySet()) {
                         String transactionType = entry.getKey();
                         String[] items = entry.getValue().split(",");
-                        if(transactionType.equals("sells")) {
-                            Collections.addAll(shopData.getSoldItems(), items);
-                        }
-                        else if(transactionType.equals("buys") || transactionType.equals("buysoptional")) {
-                            Collections.addAll(shopData.getBoughtItems(), items);
+                        for(String item: items) {
+                            if(transactionType.equals("sells")) {
+                                getItemEntry(cultureShops, item).addSellingShop(shopKey);
+                            }
+                            else if(transactionType.equals("buys") || transactionType.equals("buysoptional")) {
+                                getItemEntry(cultureShops, item).addBuyingShop(shopKey);
+                            }
                         }
                     }
 
@@ -60,7 +61,16 @@ public class ShopLookup {
         }
     }
 
-    public Map<String, ShopData> getCultureShops(String cultureKey) {
+    public Map<String, ItemShopData> getCultureShops(String cultureKey) {
         return cultureShopInfo.get(cultureKey);
+    }
+
+    private ItemShopData getItemEntry(Map<String, ItemShopData> cultureShops, String item) {
+        ItemShopData itemShopData = cultureShops.get(item);
+        if(itemShopData == null) {
+            itemShopData = new ItemShopData();
+            cultureShops.put(item, itemShopData);
+        }
+        return itemShopData;
     }
 }
