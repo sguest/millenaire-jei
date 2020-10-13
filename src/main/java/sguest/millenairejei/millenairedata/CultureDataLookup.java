@@ -20,7 +20,7 @@ public class CultureDataLookup {
     }
 
     private CultureDataLookup() {
-        cultureInfo = new TreeMap<>();
+        cultureInfo = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
     }
 
     public void loadCultureData(String cultureKey, Path culturePath) {

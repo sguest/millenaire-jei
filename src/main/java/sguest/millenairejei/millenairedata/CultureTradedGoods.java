@@ -8,8 +8,8 @@ public class CultureTradedGoods {
     private final Map<String, Integer> sellingPrices;
 
     public CultureTradedGoods() {
-        buyingPrices = new TreeMap<>();
-        sellingPrices = new TreeMap<>();
+        buyingPrices = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
+        sellingPrices = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
     }
 
     public void setBuyingPrice(String key, int price) {

@@ -9,14 +9,14 @@ public class RecipeData {
     private int cost;
     private String cultureName;
     private ItemStack cultureIcon;
-    private List<String> shopNames;
+    private List<RecipeBuildingData> buildings;
 
-    public RecipeData(ItemStack tradeItem, int cost, String cultureName, ItemStack cultureIcon, List<String> shopNames) {
+    public RecipeData(ItemStack tradeItem, int cost, String cultureName, ItemStack cultureIcon, List<RecipeBuildingData> buildings) {
         this.tradeItem = tradeItem;
         this.cost = cost;
         this.cultureName = cultureName;
         this.cultureIcon = cultureIcon;
-        this.shopNames = shopNames;
+        this.buildings = buildings;
     }
 
     public ItemStack getTradeItem() {
@@ -35,7 +35,7 @@ public class RecipeData {
         return cultureIcon;
     }
 
-    public List<String> getShopNames() {
-        return shopNames;
+    public List<RecipeBuildingData> getBuildings() {
+        return buildings;
     }
 }

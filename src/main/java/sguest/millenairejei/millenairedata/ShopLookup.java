@@ -22,7 +22,7 @@ public class ShopLookup {
     }
 
     private ShopLookup() {
-        cultureShopInfo = new TreeMap<>();
+        cultureShopInfo = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
     }
 
     public void loadShopInfo(String cultureKey, Path cultureFolder) {
@@ -31,7 +31,7 @@ public class ShopLookup {
         if(shopsFolder.toFile().exists()) {
             Map<String, ItemShopData> cultureShops = cultureShopInfo.get(cultureKey);
             if(cultureShops == null) {
-                cultureShops = new TreeMap<>();
+                cultureShops = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
                 cultureShopInfo.put(cultureKey, cultureShops);
             }
             

@@ -11,7 +11,7 @@ import sguest.millenairejei.MillenaireJei;
 
 public class DataFileHelper {
     public static Map<String, String> loadDataFile(File dataFile) {
-        Map<String, String> fileData = new TreeMap<>();
+        Map<String, String> fileData = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
 
         try (BufferedReader reader = new BufferedReader(new FileReader(dataFile))) {
             String line;

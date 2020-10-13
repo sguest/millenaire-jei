@@ -21,7 +21,7 @@ public class LanguageLookup {
     }
 
     private LanguageLookup() {
-        languageData = new TreeMap<>();
+        languageData = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
     }
 
     public void loadLanguageData(String cultureKey, Path rootFolder) {
@@ -54,16 +54,16 @@ public class LanguageLookup {
     }
 
     private void loadLanguage(String cultureKey, Path languageFolder, boolean isFallback) {
+        CultureLanguageData cultureLanguage = languageData.get(cultureKey);
+        if(cultureLanguage == null) {
+            cultureLanguage = new CultureLanguageData();
+            languageData.put(cultureKey, cultureLanguage);
+        }
+
         File languageFile = languageFolder.resolve(cultureKey + "_strings.txt").toFile();
         if(languageFile.exists()) {
             Map<String, String> fileData = DataFileHelper.loadDataFile(languageFile);
             if(fileData != null) {
-                CultureLanguageData cultureLanguage = languageData.get(cultureKey);
-                if(cultureLanguage == null) {
-                    cultureLanguage = new CultureLanguageData();
-                    languageData.put(cultureKey, cultureLanguage);
-                }
-
                 String shortName = fileData.get("culture." + cultureKey);
                 if(shortName != null && (!isFallback || cultureLanguage.getShortName() == null)) {
                     cultureLanguage.setShortName(shortName);
@@ -81,6 +81,20 @@ public class LanguageLookup {
                         if(!isFallback || cultureLanguage.getShopName(shopKey) == null) {
                             cultureLanguage.setShopName(shopKey, shopName);
                         }
+                    }
+                }
+            }
+        }
+
+        File buildingFile = languageFolder.resolve(cultureKey + "_buildings.txt").toFile();
+        if(buildingFile.exists()) {
+            Map<String, String> fileData = DataFileHelper.loadDataFile(buildingFile);
+            if(fileData != null) {
+                for(Map.Entry<String, String> entry : fileData.entrySet()) {
+                    String buildingKey = entry.getKey();
+                    if(buildingKey.endsWith("0")) {
+                        buildingKey = buildingKey.substring(0, buildingKey.length() - 1);
+                        cultureLanguage.setBuildingName(buildingKey, entry.getValue());
                     }
                 }
             }

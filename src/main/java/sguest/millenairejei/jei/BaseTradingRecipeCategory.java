@@ -9,6 +9,7 @@ import mezz.jei.api.gui.ITooltipCallback;
 import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.recipe.IRecipeCategory;
 import net.minecraft.item.ItemStack;
+import sguest.millenairejei.recipes.RecipeBuildingData;
 import sguest.millenairejei.util.Constants;
 import sguest.millenairejei.util.GuiElementHelper;
 import sguest.millenairejei.util.ItemHelper;
@@ -31,9 +32,15 @@ public abstract class BaseTradingRecipeCategory<T extends BaseTradingRecipeWrapp
 
     @Override
     public void setRecipe(IRecipeLayout recipeLayout, T recipeWrapper, IIngredients ingredients) {
+        recipeLayout.getItemStacks().addTooltipCallback(this);
         recipeLayout.getItemStacks().init(2, false, 1, -2);
         recipeLayout.getItemStacks().set(2, recipeWrapper.getRecipeEntry().getCultureIcon());
-        recipeLayout.getItemStacks().addTooltipCallback(this);
+
+        List<RecipeBuildingData> buildings = recipeWrapper.getRecipeEntry().getBuildings();
+        for(int i = 0; i < buildings.size(); i++) {
+            recipeLayout.getItemStacks().init(i + 3, false, 1, 34 + i * 20);
+            recipeLayout.getItemStacks().set(i + 3, buildings.get(i).getIcon());
+        }
     }
 
     @Override

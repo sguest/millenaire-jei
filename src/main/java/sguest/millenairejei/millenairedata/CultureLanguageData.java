@@ -7,9 +7,11 @@ public class CultureLanguageData {
     private String shortName;
     private String fullName;
     private Map<String, String> shopNames;
+    private Map<String, String> buildingNames;
 
     public CultureLanguageData() {
-        shopNames = new TreeMap<>();
+        shopNames = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
+        buildingNames = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
     }
 
     public String getShortName() {
@@ -34,5 +36,13 @@ public class CultureLanguageData {
 
     public void setShopName(String key, String name) {
         shopNames.put(key, name);
+    }
+
+    public String getBuildingName(String key) {
+        return buildingNames.get(key);
+    }
+
+    public void setBuildingName(String key, String name) {
+        buildingNames.put(key, name);
     }
 }
