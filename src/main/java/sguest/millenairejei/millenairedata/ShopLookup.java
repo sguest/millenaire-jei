@@ -40,8 +40,6 @@ public class ShopLookup {
                 String shopKey = FilenameUtils.getBaseName(shopFile.getName());
                 Map<String, String> shopFileData = DataFileHelper.loadDataFile(shopFile);
                 if(shopFileData != null) {
-                    ItemShopData shopData = new ItemShopData();
-
                     for(Map.Entry<String, String> entry : shopFileData.entrySet()) {
                         String transactionType = entry.getKey();
                         String[] items = entry.getValue().split(",");
@@ -54,8 +52,6 @@ public class ShopLookup {
                             }
                         }
                     }
-
-                    cultureShops.put(shopKey, shopData);
                 }
             }
         }

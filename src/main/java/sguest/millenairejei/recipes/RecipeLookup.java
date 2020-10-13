@@ -55,7 +55,7 @@ public class RecipeLookup {
 
                 int sellingPrice = tradedGoods.getSellingPrice(itemKey);
                 if(sellingPrice > 0) {
-                    List<RecipeBuildingData> buildings = getBuildings(shopEntry.getValue().getBuyingShops(), cultureKey, languageData);
+                    List<RecipeBuildingData> buildings = getBuildings(shopEntry.getValue().getSellingShops(), cultureKey, languageData);
                     for(List<RecipeBuildingData> subList: Lists.partition(buildings, 4)) {
                         buyingRecipes.add(new RecipeData(itemLookup.getItem(itemKey), sellingPrice, cultureName, cultureIcon, subList));
                     }
@@ -63,7 +63,7 @@ public class RecipeLookup {
 
                 int buyingPrice = tradedGoods.getBuyingPrice(itemKey);
                 if(buyingPrice > 0) {
-                    List<RecipeBuildingData> buildings = getBuildings(shopEntry.getValue().getSellingShops(), cultureKey, languageData);
+                    List<RecipeBuildingData> buildings = getBuildings(shopEntry.getValue().getBuyingShops(), cultureKey, languageData);
                     for(List<RecipeBuildingData> subList: Lists.partition(buildings, 4)) {
                         sellingRecipes.add(new RecipeData(itemLookup.getItem(itemKey), buyingPrice, cultureName, cultureIcon, subList));
                     }
