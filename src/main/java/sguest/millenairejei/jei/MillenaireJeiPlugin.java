@@ -6,6 +6,7 @@ import mezz.jei.api.IModRegistry;
 import mezz.jei.api.JEIPlugin;
 import mezz.jei.api.recipe.IRecipeCategoryRegistration;
 import sguest.millenairejei.MillenaireJei;
+import sguest.millenairejei.recipes.JeiBlacklist;
 import sguest.millenairejei.recipes.RecipeData;
 import sguest.millenairejei.recipes.RecipeLookup;
 import sguest.millenairejei.millenairedata.MillenaireDataRegistry;
@@ -35,6 +36,8 @@ public class MillenaireJeiPlugin implements IModPlugin {
 
         registry.addRecipes(recipeLookup.getBuyingRecipes(), BUYING);
         registry.addRecipes(recipeLookup.getSellingRecipes(), SELLING);
+
+        JeiBlacklist.blacklistItems(registry.getJeiHelpers().getIngredientBlacklist());
     }
 
     @Override
