@@ -1,8 +1,9 @@
-package sguest.millenairejei.jei;
+package sguest.millenairejei.jei.trading;
 
 import mezz.jei.api.IGuiHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.I18n;
+import sguest.millenairejei.jei.MillenaireJeiPlugin;
 import sguest.millenairejei.util.Constants;
 import sguest.millenairejei.util.ItemHelper;
 import mezz.jei.api.ingredients.IIngredients;

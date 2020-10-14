@@ -1,17 +1,17 @@
-package sguest.millenairejei.recipes;
+package sguest.millenairejei.recipes.trading;
 
 import java.util.List;
 
 import net.minecraft.item.ItemStack;
 
-public class RecipeData {
+public class TradingRecipeData {
     private ItemStack tradeItem;
     private int cost;
     private String cultureName;
     private ItemStack cultureIcon;
     private List<RecipeBuildingData> buildings;
 
-    public RecipeData(ItemStack tradeItem, int cost, String cultureName, ItemStack cultureIcon, List<RecipeBuildingData> buildings) {
+    public TradingRecipeData(ItemStack tradeItem, int cost, String cultureName, ItemStack cultureIcon, List<RecipeBuildingData> buildings) {
         this.tradeItem = tradeItem;
         this.cost = cost;
         this.cultureName = cultureName;

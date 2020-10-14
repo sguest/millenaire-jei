@@ -1,4 +1,4 @@
-package sguest.millenairejei.jei;
+package sguest.millenairejei.jei.trading;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,13 +8,13 @@ import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.ingredients.VanillaTypes;
 import net.minecraft.client.Minecraft;
 import net.minecraft.item.ItemStack;
-import sguest.millenairejei.recipes.RecipeData;
+import sguest.millenairejei.recipes.trading.TradingRecipeData;
 import sguest.millenairejei.util.Constants;
 import sguest.millenairejei.util.DenierHelper;
 import sguest.millenairejei.util.ItemHelper;
 
 public class SellingRecipeWrapper extends BaseTradingRecipeWrapper {
-    public SellingRecipeWrapper(RecipeData recipeEntry, IGuiHelper guiHelper) {
+    public SellingRecipeWrapper(TradingRecipeData recipeEntry, IGuiHelper guiHelper) {
         super(recipeEntry, guiHelper);
     }
 

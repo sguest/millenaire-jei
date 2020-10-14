@@ -1,4 +1,4 @@
-package sguest.millenairejei.jei;
+package sguest.millenairejei.jei.trading;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -7,21 +7,21 @@ import mezz.jei.api.IGuiHelper;
 import mezz.jei.api.gui.IDrawable;
 import mezz.jei.api.recipe.IRecipeWrapper;
 import net.minecraft.client.Minecraft;
-import sguest.millenairejei.recipes.RecipeBuildingData;
-import sguest.millenairejei.recipes.RecipeData;
+import sguest.millenairejei.recipes.trading.RecipeBuildingData;
+import sguest.millenairejei.recipes.trading.TradingRecipeData;
 
 public abstract class BaseTradingRecipeWrapper implements IRecipeWrapper {
     private final IDrawable cultureIcon;
     private final List<IDrawable> buildingIcons;
-    protected final RecipeData recipeEntry;
+    protected final TradingRecipeData recipeEntry;
 
-    protected BaseTradingRecipeWrapper(RecipeData recipeEntry, IGuiHelper guiHelper) {
+    protected BaseTradingRecipeWrapper(TradingRecipeData recipeEntry, IGuiHelper guiHelper) {
         this.recipeEntry = recipeEntry;
         this.cultureIcon = guiHelper.createDrawableIngredient(this.recipeEntry.getCultureIcon());
         buildingIcons = recipeEntry.getBuildings().stream().map(b -> guiHelper.createDrawableIngredient(b.getIcon())).collect(Collectors.toList());
     }
 
-    public RecipeData getRecipeEntry() {
+    public TradingRecipeData getRecipeEntry() {
         return recipeEntry;
     }
 

@@ -1,4 +1,4 @@
-package sguest.millenairejei.recipes;
+package sguest.millenairejei.recipes.trading;
 
 import net.minecraft.item.ItemStack;
 

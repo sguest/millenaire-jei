@@ -1,4 +1,4 @@
-package sguest.millenairejei.recipes;
+package sguest.millenairejei.recipes.trading;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,11 +19,11 @@ import sguest.millenairejei.millenairedata.ShopBuildingLookup;
 import sguest.millenairejei.millenairedata.ShopLookup;
 import sguest.millenairejei.millenairedata.TradedGoodsLookup;
 
-public class RecipeLookup {
-    private List<RecipeData> buyingRecipes;
-    private List<RecipeData> sellingRecipes;
+public class TradingRecipeLookup {
+    private List<TradingRecipeData> buyingRecipes;
+    private List<TradingRecipeData> sellingRecipes;
 
-    public RecipeLookup() {
+    public TradingRecipeLookup() {
         buyingRecipes = new ArrayList<>();
         sellingRecipes = new ArrayList<>();
     }
@@ -57,7 +57,7 @@ public class RecipeLookup {
                 if(sellingPrice > 0) {
                     List<RecipeBuildingData> buildings = getBuildings(shopEntry.getValue().getSellingShops(), cultureKey, languageData);
                     for(List<RecipeBuildingData> subList: Lists.partition(buildings, 4)) {
-                        buyingRecipes.add(new RecipeData(itemLookup.getItem(itemKey), sellingPrice, cultureName, cultureIcon, subList));
+                        buyingRecipes.add(new TradingRecipeData(itemLookup.getItem(itemKey), sellingPrice, cultureName, cultureIcon, subList));
                     }
                 }
 
@@ -65,18 +65,18 @@ public class RecipeLookup {
                 if(buyingPrice > 0) {
                     List<RecipeBuildingData> buildings = getBuildings(shopEntry.getValue().getBuyingShops(), cultureKey, languageData);
                     for(List<RecipeBuildingData> subList: Lists.partition(buildings, 4)) {
-                        sellingRecipes.add(new RecipeData(itemLookup.getItem(itemKey), buyingPrice, cultureName, cultureIcon, subList));
+                        sellingRecipes.add(new TradingRecipeData(itemLookup.getItem(itemKey), buyingPrice, cultureName, cultureIcon, subList));
                     }
                 }
             }
         }
     }
 
-    public List<RecipeData> getBuyingRecipes() {
+    public List<TradingRecipeData> getBuyingRecipes() {
         return buyingRecipes;
     }
 
-    public List<RecipeData> getSellingRecipes() {
+    public List<TradingRecipeData> getSellingRecipes() {
         return sellingRecipes;
     }
 

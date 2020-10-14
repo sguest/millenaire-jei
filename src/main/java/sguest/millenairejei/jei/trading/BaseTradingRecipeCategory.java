@@ -1,4 +1,4 @@
-package sguest.millenairejei.jei;
+package sguest.millenairejei.jei.trading;
 
 import mezz.jei.api.IGuiHelper;
 import mezz.jei.api.gui.IDrawable;
