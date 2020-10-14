@@ -15,8 +15,6 @@ public class BuyingRecipeCategory extends BaseTradingRecipeCategory<BuyingRecipe
 
     @Override
     public void setRecipe(IRecipeLayout recipeLayout, BuyingRecipeWrapper recipeWrapper, IIngredients ingredients) {
-        super.setRecipe(recipeLayout, recipeWrapper, ingredients);
-
         recipeLayout.getItemStacks().init(0, true, 85, 15);
         recipeLayout.getItemStacks().set(0, recipeWrapper.getRecipeEntry().getTradeItem());
 

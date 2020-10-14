@@ -22,8 +22,9 @@ public class MillenaireJeiPlugin implements IModPlugin {
 
     @Override
     public void register(@Nonnull IModRegistry registry) {
-        registry.handleRecipes(RecipeData.class, BuyingRecipeWrapper::new, BUYING);
-        registry.handleRecipes(RecipeData.class, SellingRecipeWrapper::new, SELLING);
+        IGuiHelper guiHelper = registry.getJeiHelpers().getGuiHelper();
+        registry.handleRecipes(RecipeData.class, data -> new BuyingRecipeWrapper(data, guiHelper), BUYING);
+        registry.handleRecipes(RecipeData.class, data -> new SellingRecipeWrapper(data, guiHelper), SELLING);
 
         registry.addRecipeCatalyst(ItemHelper.getStackFromResource(Constants.DENIER_POUCH), BUYING);
         registry.addRecipeCatalyst(ItemHelper.getStackFromResource(Constants.DENIER), BUYING);

@@ -1,5 +1,6 @@
 package sguest.millenairejei.jei;
 
+import mezz.jei.api.IGuiHelper;
 import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.ingredients.VanillaTypes;
 import net.minecraft.client.Minecraft;
@@ -7,8 +8,8 @@ import sguest.millenairejei.recipes.RecipeData;
 import sguest.millenairejei.util.DenierHelper;
 
 public class BuyingRecipeWrapper extends BaseTradingRecipeWrapper {
-    public BuyingRecipeWrapper(RecipeData recipeEntry) {
-        super(recipeEntry);
+    public BuyingRecipeWrapper(RecipeData recipeEntry, IGuiHelper guiHelper) {
+        super(recipeEntry, guiHelper);
     }
 
     @Override

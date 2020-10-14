@@ -15,8 +15,6 @@ public class SellingRecipeCategory extends BaseTradingRecipeCategory<SellingReci
 
     @Override
     public void setRecipe(IRecipeLayout recipeLayout, SellingRecipeWrapper recipeWrapper, IIngredients ingredients){
-        super.setRecipe(recipeLayout, recipeWrapper, ingredients);
-
         recipeLayout.getItemStacks().init(0, true, 1, 15);
         recipeLayout.getItemStacks().set(0, recipeWrapper.getRecipeEntry().getTradeItem());
 
