@@ -18,7 +18,7 @@ public abstract class BaseTradingRecipeWrapper implements IRecipeWrapper {
     protected BaseTradingRecipeWrapper(TradingRecipeData recipeEntry, IGuiHelper guiHelper) {
         this.recipeEntry = recipeEntry;
         this.cultureIcon = guiHelper.createDrawableIngredient(this.recipeEntry.getCultureIcon());
-        buildingIcons = recipeEntry.getBuildings().stream().map(b -> guiHelper.createDrawableIngredient(b.getIcon())).collect(Collectors.toList());
+        buildingIcons = recipeEntry.getBuildings().stream().map(b -> b.getIcon() == null ? guiHelper.createBlankDrawable(16, 16) : guiHelper.createDrawableIngredient(b.getIcon())).collect(Collectors.toList());
     }
 
     public TradingRecipeData getRecipeEntry() {
