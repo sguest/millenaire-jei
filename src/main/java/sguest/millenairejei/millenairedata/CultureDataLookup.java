@@ -2,6 +2,7 @@ package sguest.millenairejei.millenairedata;
 
 import java.io.File;
 import java.nio.file.Path;
+import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -32,9 +33,9 @@ public class CultureDataLookup {
 
         File cultureFile = culturePath.resolve("culture.txt").toFile();
         if(cultureFile.exists()) {
-            Map<String, String> fileData = DataFileHelper.loadDataFile(cultureFile);
+            Map<String, List<String>> fileData = DataFileHelper.loadDataFile(cultureFile);
             if(fileData != null && fileData.containsKey("icon")) {
-                cultureData.setIcon(fileData.get("icon"));
+                cultureData.setIcon(fileData.get("icon").get(0));
             }
         }
     }

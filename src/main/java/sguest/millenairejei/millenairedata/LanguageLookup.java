@@ -2,6 +2,7 @@ package sguest.millenairejei.millenairedata;
 
 import java.io.File;
 import java.nio.file.Path;
+import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -62,24 +63,24 @@ public class LanguageLookup {
 
         File languageFile = languageFolder.resolve(cultureKey + "_strings.txt").toFile();
         if(languageFile.exists()) {
-            Map<String, String> fileData = DataFileHelper.loadDataFile(languageFile);
+            Map<String, List<String>> fileData = DataFileHelper.loadDataFile(languageFile);
             if(fileData != null) {
-                String shortName = fileData.get("culture." + cultureKey);
+                List<String> shortName = fileData.get("culture." + cultureKey);
                 if(shortName != null && (!isFallback || cultureLanguage.getShortName() == null)) {
-                    cultureLanguage.setShortName(shortName);
+                    cultureLanguage.setShortName(shortName.get(0));
                 }
 
-                String fullName = fileData.get("culture.fullname");
+                List<String> fullName = fileData.get("culture.fullname");
                 if(fullName != null && (!isFallback || cultureLanguage.getFullName() == null)) {
-                    cultureLanguage.setFullName(fullName);
+                    cultureLanguage.setFullName(fullName.get(0));
                 }
 
-                for(Map.Entry<String, String> entry : fileData.entrySet()) {
+                for(Map.Entry<String, List<String>> entry : fileData.entrySet()) {
                     if(entry.getKey().startsWith("shop.")) {
                         String shopKey = entry.getKey().split("\\.", 2)[1];
-                        String shopName = entry.getValue();
+                        List<String> shopName = entry.getValue();
                         if(!isFallback || cultureLanguage.getShopName(shopKey) == null) {
-                            cultureLanguage.setShopName(shopKey, shopName);
+                            cultureLanguage.setShopName(shopKey, shopName.get(0));
                         }
                     }
                 }
@@ -88,13 +89,13 @@ public class LanguageLookup {
 
         File buildingFile = languageFolder.resolve(cultureKey + "_buildings.txt").toFile();
         if(buildingFile.exists()) {
-            Map<String, String> fileData = DataFileHelper.loadDataFile(buildingFile);
+            Map<String, List<String>> fileData = DataFileHelper.loadDataFile(buildingFile);
             if(fileData != null) {
-                for(Map.Entry<String, String> entry : fileData.entrySet()) {
+                for(Map.Entry<String, List<String>> entry : fileData.entrySet()) {
                     String buildingKey = entry.getKey();
                     if(buildingKey.endsWith("0")) {
                         buildingKey = buildingKey.substring(0, buildingKey.length() - 1);
-                        cultureLanguage.setBuildingName(buildingKey, entry.getValue());
+                        cultureLanguage.setBuildingName(buildingKey, entry.getValue().get(0));
                     }
                 }
             }

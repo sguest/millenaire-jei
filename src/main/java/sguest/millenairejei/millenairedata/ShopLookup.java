@@ -2,6 +2,7 @@ package sguest.millenairejei.millenairedata;
 
 import java.io.File;
 import java.nio.file.Path;
+import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -38,11 +39,11 @@ public class ShopLookup {
             File[] shopFiles = shopsFolder.toFile().listFiles();
             for (File shopFile : shopFiles) {
                 String shopKey = FilenameUtils.getBaseName(shopFile.getName());
-                Map<String, String> shopFileData = DataFileHelper.loadDataFile(shopFile);
+                Map<String, List<String>> shopFileData = DataFileHelper.loadDataFile(shopFile);
                 if(shopFileData != null) {
-                    for(Map.Entry<String, String> entry : shopFileData.entrySet()) {
+                    for(Map.Entry<String, List<String>> entry : shopFileData.entrySet()) {
                         String transactionType = entry.getKey();
-                        String[] items = entry.getValue().split(",");
+                        String[] items = entry.getValue().get(0).split(",");
                         for(String item: items) {
                             if(transactionType.equals("sells")) {
                                 getItemEntry(cultureShops, item).addSellingShop(shopKey);

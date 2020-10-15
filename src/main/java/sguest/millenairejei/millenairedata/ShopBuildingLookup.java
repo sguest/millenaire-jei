@@ -63,25 +63,25 @@ public class ShopBuildingLookup {
                     loadDataRecursive(cultureShops, buildingFile.toPath(), depth + 1);
                 }
                 else if(FilenameUtils.getExtension(buildingFile.getName()).equals("txt")) {
-                    Map<String, String> fileData = DataFileHelper.loadDataFile(buildingFile);
+                    Map<String, List<String>> fileData = DataFileHelper.loadDataFile(buildingFile);
                     if(fileData != null && fileData.size() == 0) {
                         fileData = loadSemicolonFormat(buildingFile);
                     }
                     if(fileData != null) {
-                        for(Map.Entry<String, String> entry : fileData.entrySet()) {
+                        for(Map.Entry<String, List<String>> entry : fileData.entrySet()) {
                             if(entry.getKey().equals("shop") || entry.getKey().endsWith(".shop")) {
                                 String buildingKey = FilenameUtils.getBaseName(buildingFile.getName());
-                                String shopKey = entry.getValue();
+                                String shopKey = entry.getValue().get(0);
                                 List<BuildingData> buildings = cultureShops.get(shopKey);
                                 if(buildings == null) {
                                     buildings = new ArrayList<>();
                                     cultureShops.put(shopKey, buildings);
                                 }
-                                String icon = fileData.get("building.icon");
+                                List<String> icon = fileData.get("building.icon");
                                 if(icon == null) {
                                     icon = fileData.get("icon");
                                 }
-                                buildings.add(new BuildingData(buildingKey, icon));
+                                buildings.add(new BuildingData(buildingKey, icon == null ? null : icon.get(0)));
                             }
                         }
                     }
@@ -90,8 +90,8 @@ public class ShopBuildingLookup {
         }
     }
 
-    private Map<String, String> loadSemicolonFormat(File buildingFile) {
-        Map<String, String> fileData = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
+    private Map<String, List<String>> loadSemicolonFormat(File buildingFile) {
+        Map<String, List<String>> fileData = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
         try (BufferedReader reader = new BufferedReader(new FileReader(buildingFile))) {
             String line;
             while((line = reader.readLine()) != null) {
@@ -100,7 +100,12 @@ public class ShopBuildingLookup {
                     for(String param : params) {
                         String[] parts = param.split(":", 2);
                         if(parts.length == 2) {
-                            fileData.put(parts[0], parts[1]);
+                            List<String> dataItems = fileData.get(parts[0]);
+                            if(dataItems == null) {
+                                dataItems = new ArrayList<>();
+                                fileData.put(parts[0], dataItems);
+                            }
+                            dataItems.add(parts[1]);
                         }
                     }
                 }
