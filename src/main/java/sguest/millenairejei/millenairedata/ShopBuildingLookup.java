@@ -1,6 +1,9 @@
 package sguest.millenairejei.millenairedata;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
@@ -61,9 +64,12 @@ public class ShopBuildingLookup {
                 }
                 else if(FilenameUtils.getExtension(buildingFile.getName()).equals("txt")) {
                     Map<String, String> fileData = DataFileHelper.loadDataFile(buildingFile);
+                    if(fileData != null && fileData.size() == 0) {
+                        fileData = loadSemicolonFormat(buildingFile);
+                    }
                     if(fileData != null) {
                         for(Map.Entry<String, String> entry : fileData.entrySet()) {
-                            if(entry.getKey().endsWith(".shop")) {
+                            if(entry.getKey().equals("shop") || entry.getKey().endsWith(".shop")) {
                                 String buildingKey = FilenameUtils.getBaseName(buildingFile.getName());
                                 String shopKey = entry.getValue();
                                 List<BuildingData> buildings = cultureShops.get(shopKey);
@@ -71,12 +77,38 @@ public class ShopBuildingLookup {
                                     buildings = new ArrayList<>();
                                     cultureShops.put(shopKey, buildings);
                                 }
-                                buildings.add(new BuildingData(buildingKey, fileData.get("building.icon")));
+                                String icon = fileData.get("building.icon");
+                                if(icon == null) {
+                                    icon = fileData.get("icon");
+                                }
+                                buildings.add(new BuildingData(buildingKey, icon));
                             }
                         }
                     }
                 }
             }
         }
+    }
+
+    private Map<String, String> loadSemicolonFormat(File buildingFile) {
+        Map<String, String> fileData = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
+        try (BufferedReader reader = new BufferedReader(new FileReader(buildingFile))) {
+            String line;
+            while((line = reader.readLine()) != null) {
+                if(line.length() > 0 && !line.startsWith("//")) {
+                    String[] params = line.split(";");
+                    for(String param : params) {
+                        String[] parts = param.split(":", 2);
+                        if(parts.length == 2) {
+                            fileData.put(parts[0], parts[1]);
+                        }
+                    }
+                }
+            }
+        } catch(IOException ex) {
+            MillenaireJei.getLogger().error("Failed to load data file " + buildingFile, ex);
+            return null;
+        }
+        return fileData;
     }
 }
