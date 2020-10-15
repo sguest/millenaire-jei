@@ -5,8 +5,8 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Path;
-import java.util.HashMap;
 import java.util.Map;
+import java.util.TreeMap;
 
 import sguest.millenairejei.MillenaireJei;
 
@@ -23,7 +23,7 @@ public class TradedGoodsLookup {
     }
 
     private TradedGoodsLookup() {
-        cultureData = new HashMap<>();
+        cultureData = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
     }
 
     public void loadTradedGoods(String cultureKey, Path cultureFolder) {
