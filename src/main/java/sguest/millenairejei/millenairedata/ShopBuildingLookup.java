@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
@@ -37,8 +38,8 @@ public class ShopBuildingLookup {
             cultureShops = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
             shopsByCulture.put(cultureKey, cultureShops);
         }
-        loadDataRecursive(cultureShops, cultureFolder.resolve("buildings"), 0);
-        loadDataRecursive(cultureShops, cultureFolder.resolve("lonebuildings"), 0);
+        loadData(cultureShops, cultureFolder.resolve("buildings"));
+        loadData(cultureShops, cultureFolder.resolve("lonebuildings"));
     }
 
     public List<BuildingData> getShopBuildings(String cultureKey, String shopKey) {
@@ -49,20 +50,11 @@ public class ShopBuildingLookup {
         return byCulture.get(shopKey);
     }
 
-    private void loadDataRecursive(Map<String, List<BuildingData>> cultureShops, Path loadingFolder, int depth) {
-        if(depth >= 20) {
-            // Something has gone wrong, no one likes infinite recursion oopsies
-            MillenaireJei.getLogger().warn("Excessive recursion detected loading building data at path " + loadingFolder);
-            return;
-        }
-
+    private void loadData(Map<String, List<BuildingData>> cultureShops, Path loadingFolder) {
         if(loadingFolder.toFile().exists()) {
-            File[] buildingFiles = loadingFolder.toFile().listFiles();
-            for (File buildingFile : buildingFiles) {
-                if(buildingFile.isDirectory()) {
-                    loadDataRecursive(cultureShops, buildingFile.toPath(), depth + 1);
-                }
-                else if(FilenameUtils.getExtension(buildingFile.getName()).equals("txt")) {
+            try {
+                Files.walk(loadingFolder).filter(Files::isRegularFile).forEach(file -> {
+                    File buildingFile = file.toFile();
                     Map<String, List<String>> fileData = DataFileHelper.loadDataFile(buildingFile);
                     if(fileData != null && fileData.size() == 0) {
                         fileData = loadSemicolonFormat(buildingFile);
@@ -85,7 +77,9 @@ public class ShopBuildingLookup {
                             }
                         }
                     }
-                }
+                });
+            } catch (IOException ex) {
+                MillenaireJei.getLogger().error("Failed to load shops from folder " + loadingFolder, ex);
             }
         }
     }
