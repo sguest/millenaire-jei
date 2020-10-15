@@ -7,6 +7,7 @@ import mezz.jei.api.IGuiHelper;
 import mezz.jei.api.gui.IDrawable;
 import mezz.jei.api.recipe.IRecipeWrapper;
 import net.minecraft.client.Minecraft;
+import net.minecraft.item.ItemStack;
 import sguest.millenairejei.recipes.trading.RecipeBuildingData;
 import sguest.millenairejei.recipes.trading.TradingRecipeData;
 
@@ -17,7 +18,8 @@ public abstract class BaseTradingRecipeWrapper implements IRecipeWrapper {
 
     protected BaseTradingRecipeWrapper(TradingRecipeData recipeEntry, IGuiHelper guiHelper) {
         this.recipeEntry = recipeEntry;
-        this.cultureIcon = guiHelper.createDrawableIngredient(this.recipeEntry.getCultureIcon());
+        ItemStack cultureStack = this.recipeEntry.getCultureIcon();
+        this.cultureIcon = cultureStack == null ? guiHelper.createBlankDrawable(16, 16) : guiHelper.createDrawableIngredient(cultureStack);
         buildingIcons = recipeEntry.getBuildings().stream().map(b -> b.getIcon() == null ? guiHelper.createBlankDrawable(16, 16) : guiHelper.createDrawableIngredient(b.getIcon())).collect(Collectors.toList());
     }
 
