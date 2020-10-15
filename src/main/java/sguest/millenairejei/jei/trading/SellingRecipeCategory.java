@@ -16,10 +16,10 @@ public class SellingRecipeCategory extends BaseTradingRecipeCategory<SellingReci
 
     @Override
     public void setRecipe(IRecipeLayout recipeLayout, SellingRecipeWrapper recipeWrapper, IIngredients ingredients){
-        recipeLayout.getItemStacks().init(0, true, 1, 15);
+        recipeLayout.getItemStacks().init(0, true, 1, 35);
         recipeLayout.getItemStacks().set(0, recipeWrapper.getRecipeEntry().getTradeItem());
 
-        recipeLayout.getItemStacks().init(1, false, 45, 15);
+        recipeLayout.getItemStacks().init(1, false, 45, 35);
         recipeLayout.getItemStacks().set(1, ItemHelper.getStackFromResource(Constants.DENIER_POUCH));
     }
 
@@ -30,6 +30,6 @@ public class SellingRecipeCategory extends BaseTradingRecipeCategory<SellingReci
 
     @Override
     public void drawExtras(Minecraft minecraft) {
-        arrow.draw(minecraft, 22, 15);
+        arrow.draw(minecraft, 22, 35);
     }
 }

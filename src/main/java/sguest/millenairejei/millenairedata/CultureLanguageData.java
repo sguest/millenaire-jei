@@ -8,10 +8,12 @@ public class CultureLanguageData {
     private String fullName;
     private Map<String, String> shopNames;
     private Map<String, String> buildingNames;
+    private Map<String, String> villageNames;
 
     public CultureLanguageData() {
         shopNames = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
         buildingNames = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
+        villageNames = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
     }
 
     public String getShortName() {
@@ -44,5 +46,13 @@ public class CultureLanguageData {
 
     public void setBuildingName(String key, String name) {
         buildingNames.put(key, name);
+    }
+
+    public String getVillageName(String key) {
+        return villageNames.get(key);
+    }
+
+    public void setVillageName(String key, String name) {
+        villageNames.put(key, name);
     }
 }

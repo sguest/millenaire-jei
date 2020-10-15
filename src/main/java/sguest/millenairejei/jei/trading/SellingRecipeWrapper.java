@@ -32,6 +32,6 @@ public class SellingRecipeWrapper extends BaseTradingRecipeWrapper {
     @Override
     public void drawInfo(Minecraft minecraft, int recipeWidth, int recipeHeight, int mouseX, int mouseY) {
         super.drawInfo(minecraft, recipeWidth, recipeHeight, mouseX, mouseY);
-        DenierHelper.drawPrice(minecraft, recipeEntry.getCost(), 65, 21);
+        DenierHelper.drawPrice(minecraft, recipeEntry.getCost(), 65, 41);
     }
 }

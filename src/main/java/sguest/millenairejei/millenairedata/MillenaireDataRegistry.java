@@ -46,6 +46,7 @@ public class MillenaireDataRegistry {
                     LanguageLookup.getInstance().loadLanguageData(cultureKey, loadingRoot);
                     CultureDataLookup.getInstance().loadCultureData(cultureKey, culturePath);
                     ShopBuildingLookup.getInstance().loadData(cultureKey, culturePath);
+                    VillageLookup.getInstance().LoadVillages(cultureKey, culturePath);
                 }
             }
         }
