@@ -2,6 +2,8 @@ package sguest.millenairejei.millenairedata;
 
 import java.io.File;
 import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -13,7 +15,7 @@ import sguest.millenairejei.util.DataFileHelper;
 public class ShopLookup {
     private static ShopLookup instance;
 
-    private Map<String, Map<String, ItemShopData>> cultureShopInfo;
+    private Map<String, Map<String, ShopData>> cultureShopInfo;
 
     public static ShopLookup getInstance() {
         if(instance == null) {
@@ -30,7 +32,7 @@ public class ShopLookup {
         Path shopsFolder = cultureFolder.resolve("shops");
         
         if(shopsFolder.toFile().exists()) {
-            Map<String, ItemShopData> cultureShops = cultureShopInfo.get(cultureKey);
+            Map<String, ShopData> cultureShops = cultureShopInfo.get(cultureKey);
             if(cultureShops == null) {
                 cultureShops = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
                 cultureShopInfo.put(cultureKey, cultureShops);
@@ -41,33 +43,28 @@ public class ShopLookup {
                 String shopKey = FilenameUtils.getBaseName(shopFile.getName());
                 Map<String, List<String>> shopFileData = DataFileHelper.loadDataFile(shopFile);
                 if(shopFileData != null) {
-                    for(Map.Entry<String, List<String>> entry : shopFileData.entrySet()) {
-                        String transactionType = entry.getKey();
-                        String[] items = entry.getValue().get(0).split(",");
-                        for(String item: items) {
-                            if(transactionType.equals("sells")) {
-                                getItemEntry(cultureShops, item).addSellingShop(shopKey);
-                            }
-                            else if(transactionType.equals("buys") || transactionType.equals("buysoptional")) {
-                                getItemEntry(cultureShops, item).addBuyingShop(shopKey);
-                            }
-                        }
-                    }
+                    List<String> soldItems = getItemsFromFile(shopFileData, "sells");
+                    List<String> boughtItems = getItemsFromFile(shopFileData, "buys");
+                    boughtItems.addAll(getItemsFromFile(shopFileData, "buysoptional"));
+                    cultureShops.put(shopKey, new ShopData(soldItems, boughtItems));
                 }
             }
         }
     }
 
-    public Map<String, ItemShopData> getCultureShops(String cultureKey) {
+    public Map<String, ShopData> getCultureShops(String cultureKey) {
         return cultureShopInfo.get(cultureKey);
     }
 
-    private ItemShopData getItemEntry(Map<String, ItemShopData> cultureShops, String item) {
-        ItemShopData itemShopData = cultureShops.get(item);
-        if(itemShopData == null) {
-            itemShopData = new ItemShopData();
-            cultureShops.put(item, itemShopData);
+    private List<String> getItemsFromFile(Map<String, List<String>> fileData, String key) {
+        List<String> items = new ArrayList<>();
+        List<String> fileLines = fileData.get(key);
+        if(fileLines != null) {
+            for(String line : fileLines) {
+                Collections.addAll(items, line.split(","));
+            }
         }
-        return itemShopData;
+
+        return items;
     }
 }

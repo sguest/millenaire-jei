@@ -15,4 +15,6 @@ public class Constants {
     public static final String RECIPE_MOD_DISPLAY = "Millenaire";
 
     public static final String SUN_TEXTURE = "minecraft:textures/environment/sun.png";
+
+    public static final String BUILDING_CLEAN_REGEX = "_[a-zA-Z]\\d?$";
 }

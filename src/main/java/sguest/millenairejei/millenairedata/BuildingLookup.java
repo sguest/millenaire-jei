@@ -14,68 +14,70 @@ import java.util.TreeMap;
 import org.apache.commons.io.FilenameUtils;
 
 import sguest.millenairejei.MillenaireJei;
+import sguest.millenairejei.util.Constants;
 import sguest.millenairejei.util.DataFileHelper;
 
-public class ShopBuildingLookup {
-    private static ShopBuildingLookup instance;
+public class BuildingLookup {
+    private static BuildingLookup instance;
 
-    private Map<String, Map<String, List<BuildingData>>> shopsByCulture;
+    private Map<String, Map<String, BuildingData>> cultureBuildingData;
 
-    public static ShopBuildingLookup getInstance() {
+    public static BuildingLookup getInstance() {
         if(instance == null) {
-            instance = new ShopBuildingLookup();
+            instance = new BuildingLookup();
         }
         return instance;
     }
 
-    private ShopBuildingLookup() {
-        shopsByCulture = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
+    private BuildingLookup() {
+        cultureBuildingData = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
     }
 
     public void loadData(String cultureKey, Path cultureFolder) {
-        Map<String, List<BuildingData>> cultureShops = shopsByCulture.get(cultureKey);
-        if(cultureShops == null) {
-            cultureShops = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
-            shopsByCulture.put(cultureKey, cultureShops);
+        Map<String, BuildingData> cultureBuildings = cultureBuildingData.get(cultureKey);
+        if(cultureBuildings == null) {
+            cultureBuildings = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
+            cultureBuildingData.put(cultureKey, cultureBuildings);
         }
-        loadData(cultureShops, cultureFolder.resolve("buildings"));
-        loadData(cultureShops, cultureFolder.resolve("lonebuildings"));
+        loadDataFolder(cultureBuildings, cultureFolder.resolve("buildings"));
+        loadDataFolder(cultureBuildings, cultureFolder.resolve("lonebuildings"));
     }
 
-    public List<BuildingData> getShopBuildings(String cultureKey, String shopKey) {
-        Map<String, List<BuildingData>> byCulture = shopsByCulture.get(cultureKey);
-        if(byCulture == null) {
-            return null;
-        }
-        return byCulture.get(shopKey);
+    public Map<String, BuildingData> getCultureBuildings(String cultureKey) {
+        return cultureBuildingData.get(cultureKey);
     }
 
-    private void loadData(Map<String, List<BuildingData>> cultureShops, Path loadingFolder) {
+    private void loadDataFolder(Map<String, BuildingData> cultureBuildings, Path loadingFolder) {
         if(loadingFolder.toFile().exists()) {
             try {
-                Files.walk(loadingFolder).filter(Files::isRegularFile).forEach(file -> {
+                Files.walk(loadingFolder)
+                .filter(Files::isRegularFile)
+                .filter(file -> FilenameUtils.getExtension(file.toFile().getName()).equals("txt"))
+                .forEach(file -> {
                     File buildingFile = file.toFile();
                     Map<String, List<String>> fileData = DataFileHelper.loadDataFile(buildingFile);
                     if(fileData != null && fileData.size() == 0) {
                         fileData = loadSemicolonFormat(buildingFile);
                     }
                     if(fileData != null) {
+                        String buildingKey = FilenameUtils.getBaseName(buildingFile.getName());
+                        buildingKey = buildingKey.replaceAll(Constants.BUILDING_CLEAN_REGEX, "");
+                        List<String> shops = new ArrayList<>();
+                        List<String> subBuildings = new ArrayList<>();
+                        String icon = null;
                         for(Map.Entry<String, List<String>> entry : fileData.entrySet()) {
                             if(entry.getKey().equals("shop") || entry.getKey().endsWith(".shop")) {
-                                String buildingKey = FilenameUtils.getBaseName(buildingFile.getName());
-                                String shopKey = entry.getValue().get(0);
-                                List<BuildingData> buildings = cultureShops.get(shopKey);
-                                if(buildings == null) {
-                                    buildings = new ArrayList<>();
-                                    cultureShops.put(shopKey, buildings);
-                                }
-                                List<String> icon = fileData.get("building.icon");
-                                if(icon == null) {
-                                    icon = fileData.get("icon");
-                                }
-                                buildings.add(new BuildingData(buildingKey, icon == null ? null : icon.get(0)));
+                                shops.addAll(entry.getValue());
+                            }
+                            else if(entry.getKey().equals("subbuilding") || entry.getKey().endsWith(".subbuilding")) {
+                                subBuildings.addAll(entry.getValue());
+                            }
+                            else if(entry.getKey().equals("icon") || entry.getKey().endsWith(".icon")) {
+                                icon = entry.getValue().get(0);
                             }
                         }
+
+                        cultureBuildings.put(buildingKey, new BuildingData(shops, subBuildings, icon));
                     }
                 });
             } catch (IOException ex) {

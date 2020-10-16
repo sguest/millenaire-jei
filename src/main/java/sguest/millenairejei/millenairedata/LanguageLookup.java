@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.TreeMap;
 
 import net.minecraft.client.Minecraft;
+import sguest.millenairejei.util.Constants;
 import sguest.millenairejei.util.DataFileHelper;
 
 public class LanguageLookup {
@@ -100,10 +101,8 @@ public class LanguageLookup {
             if(fileData != null) {
                 for(Map.Entry<String, List<String>> entry : fileData.entrySet()) {
                     String buildingKey = entry.getKey();
-                    if(buildingKey.endsWith("0")) {
-                        buildingKey = buildingKey.substring(0, buildingKey.length() - 1);
-                        cultureLanguage.setBuildingName(buildingKey, entry.getValue().get(0));
-                    }
+                    buildingKey = buildingKey.replaceAll(Constants.BUILDING_CLEAN_REGEX, "");
+                    cultureLanguage.setBuildingName(buildingKey, entry.getValue().get(0));
                 }
             }
         }
