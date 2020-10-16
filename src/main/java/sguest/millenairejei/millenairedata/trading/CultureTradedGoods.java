@@ -1,4 +1,4 @@
-package sguest.millenairejei.millenairedata;
+package sguest.millenairejei.millenairedata.trading;
 
 import java.util.Map;
 import java.util.TreeMap;

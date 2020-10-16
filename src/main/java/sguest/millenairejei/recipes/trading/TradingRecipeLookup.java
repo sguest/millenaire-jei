@@ -8,19 +8,19 @@ import java.util.TreeMap;
 import com.google.common.collect.Lists;
 
 import net.minecraft.item.ItemStack;
-import sguest.millenairejei.millenairedata.BuildingData;
 import sguest.millenairejei.millenairedata.CultureData;
 import sguest.millenairejei.millenairedata.CultureDataLookup;
 import sguest.millenairejei.millenairedata.CultureLanguageData;
-import sguest.millenairejei.millenairedata.CultureTradedGoods;
 import sguest.millenairejei.millenairedata.ItemLookup;
 import sguest.millenairejei.millenairedata.LanguageLookup;
-import sguest.millenairejei.millenairedata.ShopData;
-import sguest.millenairejei.millenairedata.BuildingLookup;
-import sguest.millenairejei.millenairedata.ShopLookup;
-import sguest.millenairejei.millenairedata.TradedGoodsLookup;
-import sguest.millenairejei.millenairedata.VillageData;
-import sguest.millenairejei.millenairedata.VillageLookup;
+import sguest.millenairejei.millenairedata.trading.BuildingData;
+import sguest.millenairejei.millenairedata.trading.BuildingLookup;
+import sguest.millenairejei.millenairedata.trading.CultureTradedGoods;
+import sguest.millenairejei.millenairedata.trading.ShopData;
+import sguest.millenairejei.millenairedata.trading.ShopLookup;
+import sguest.millenairejei.millenairedata.trading.TradedGoodsLookup;
+import sguest.millenairejei.millenairedata.trading.VillageData;
+import sguest.millenairejei.millenairedata.trading.VillageLookup;
 
 public class TradingRecipeLookup {
     private List<TradingRecipeData> buyingRecipes;

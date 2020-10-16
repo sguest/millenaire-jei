@@ -6,6 +6,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import sguest.millenairejei.MillenaireJei;
+import sguest.millenairejei.millenairedata.trading.BuildingLookup;
+import sguest.millenairejei.millenairedata.trading.ShopLookup;
+import sguest.millenairejei.millenairedata.trading.TradedGoodsLookup;
+import sguest.millenairejei.millenairedata.trading.VillageLookup;
 
 public class MillenaireDataRegistry {
     private static MillenaireDataRegistry instance;

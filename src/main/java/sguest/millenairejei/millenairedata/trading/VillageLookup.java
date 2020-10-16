@@ -1,4 +1,4 @@
-package sguest.millenairejei.millenairedata;
+package sguest.millenairejei.millenairedata.trading;
 
 import java.io.IOException;
 import java.nio.file.Files;
