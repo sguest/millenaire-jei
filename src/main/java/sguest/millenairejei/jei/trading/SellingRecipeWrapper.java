@@ -22,7 +22,6 @@ public class SellingRecipeWrapper extends BaseTradingRecipeWrapper {
     public void getIngredients(IIngredients ingredients) {
         ingredients.setInput(VanillaTypes.ITEM, recipeEntry.getTradeItem());
         List<ItemStack> outputs = new ArrayList<ItemStack>();
-        outputs.add(ItemHelper.getStackFromResource(Constants.DENIER_POUCH));
         outputs.add(ItemHelper.getStackFromResource(Constants.DENIER));
         outputs.add(ItemHelper.getStackFromResource(Constants.DENIER_ARGENT));
         outputs.add(ItemHelper.getStackFromResource(Constants.DENIER_OR));
