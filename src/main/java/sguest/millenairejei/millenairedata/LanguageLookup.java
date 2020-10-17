@@ -91,6 +91,13 @@ public class LanguageLookup {
                             cultureLanguage.setVillageName(villageKey, villageName.get(0));
                         }
                     }
+                    else if(entry.getKey().startsWith("villager.")) {
+                        String villagerKey = entry.getKey().split("\\.", 2)[1];
+                        List<String> villagerName = entry.getValue();
+                        if(!isFallback || cultureLanguage.getVillagerName(villagerKey) == null) {
+                            cultureLanguage.setVillagerName(villagerKey, villagerName.get(0));
+                        }
+                    }
                 }
             }
         }

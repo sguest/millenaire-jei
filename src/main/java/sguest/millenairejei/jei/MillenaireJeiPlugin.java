@@ -16,12 +16,16 @@ import sguest.millenairejei.jei.trading.BuyingRecipeCategory;
 import sguest.millenairejei.jei.trading.BuyingRecipeWrapper;
 import sguest.millenairejei.jei.trading.SellingRecipeCategory;
 import sguest.millenairejei.jei.trading.SellingRecipeWrapper;
+import sguest.millenairejei.jei.villagercrafting.VillagerCrafingRecipeWrapper;
+import sguest.millenairejei.jei.villagercrafting.VillagerCraftingRecipeCategory;
 import sguest.millenairejei.recipes.EmptyRecipeData;
 import sguest.millenairejei.recipes.JeiBlacklist;
 import sguest.millenairejei.recipes.painting.PaintingRecipeData;
 import sguest.millenairejei.recipes.painting.PaintingRecipeLookup;
 import sguest.millenairejei.recipes.trading.TradingRecipeData;
 import sguest.millenairejei.recipes.trading.TradingRecipeLookup;
+import sguest.millenairejei.recipes.villagercrafting.VillagerCraftingRecipeData;
+import sguest.millenairejei.recipes.villagercrafting.VillagerCraftingRecipeLookup;
 import sguest.millenairejei.millenairedata.MillenaireDataRegistry;
 import sguest.millenairejei.util.Constants;
 import sguest.millenairejei.util.ItemHelper;
@@ -37,6 +41,7 @@ public class MillenaireJeiPlugin implements IModPlugin {
     public static final String PAINTING = MillenaireJei.MODID + ".painting";
     public static final String BRICK_MOULD = MillenaireJei.MODID + ".brickmould";
     public static final String DRYING = MillenaireJei.MODID + ".drying";
+    public static final String VILLAGER_CRAFTING = MillenaireJei.MODID + ".villagercrafting";
 
     @Override
     public void register(@Nonnull IModRegistry registry) {
@@ -46,6 +51,7 @@ public class MillenaireJeiPlugin implements IModPlugin {
         registry.handleRecipes(PaintingRecipeData.class, PaintingRecipeWrapper::new, PAINTING);
         registry.handleRecipes(EmptyRecipeData.class, o -> new BrickMouldRecipeWrapper(), BRICK_MOULD);
         registry.handleRecipes(EmptyRecipeData.class, o -> new DryingRecipeWrapper(), DRYING);
+        registry.handleRecipes(VillagerCraftingRecipeData.class, data -> new VillagerCrafingRecipeWrapper(data, guiHelper), VILLAGER_CRAFTING);
 
         registry.addRecipeCatalyst(ItemHelper.getStackFromResource(Constants.DENIER_POUCH), BUYING);
         registry.addRecipeCatalyst(ItemHelper.getStackFromResource(Constants.DENIER), BUYING);
@@ -69,6 +75,11 @@ public class MillenaireJeiPlugin implements IModPlugin {
         registry.addRecipes(Collections.singletonList(new EmptyRecipeData()), BRICK_MOULD);
         registry.addRecipes(Collections.singletonList(new EmptyRecipeData()), DRYING);
 
+        VillagerCraftingRecipeLookup villagerCraftingLookup = new VillagerCraftingRecipeLookup();
+        villagerCraftingLookup.BuildRecipes();
+
+        registry.addRecipes(villagerCraftingLookup.getCraftingRecipes(), VILLAGER_CRAFTING);
+
         JeiBlacklist.blacklistItems(registry.getJeiHelpers().getIngredientBlacklist());
     }
 
@@ -80,7 +91,8 @@ public class MillenaireJeiPlugin implements IModPlugin {
             new SellingRecipeCategory(guiHelper),
             new PaintingRecipeCategory(guiHelper),
             new BrickMouldRecipeCategory(guiHelper),
-            new DryingRecipeCategory(guiHelper)
+            new DryingRecipeCategory(guiHelper),
+            new VillagerCraftingRecipeCategory(guiHelper)
         );
     }
 }

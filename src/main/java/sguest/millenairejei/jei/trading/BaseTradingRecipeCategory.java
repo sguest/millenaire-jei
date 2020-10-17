@@ -4,7 +4,7 @@ import mezz.jei.api.IGuiHelper;
 import mezz.jei.api.gui.IDrawable;
 import mezz.jei.api.recipe.IRecipeCategory;
 import sguest.millenairejei.util.Constants;
-import sguest.millenairejei.util.GuiElementHelper;
+import sguest.millenairejei.util.UiHelper;
 import sguest.millenairejei.util.ItemHelper;
 
 public abstract class BaseTradingRecipeCategory<T extends BaseTradingRecipeWrapper> implements IRecipeCategory<T> {
@@ -19,7 +19,7 @@ public abstract class BaseTradingRecipeCategory<T extends BaseTradingRecipeWrapp
         background = guiHelper.createBlankDrawable(180, 110);
         this.title = title;
         this.icon = guiHelper.createDrawableIngredient(ItemHelper.getStackFromResource(icon));
-        arrow = GuiElementHelper.staticArrow(guiHelper);
+        arrow = UiHelper.staticArrow(guiHelper);
     }
 
     @Override

@@ -9,7 +9,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.I18n;
 import sguest.millenairejei.jei.MillenaireJeiPlugin;
 import sguest.millenairejei.util.Constants;
-import sguest.millenairejei.util.GuiElementHelper;
+import sguest.millenairejei.util.UiHelper;
 import sguest.millenairejei.util.ItemHelper;
 
 public class PaintingRecipeCategory implements IRecipeCategory<PaintingRecipeWrapper> {
@@ -22,7 +22,7 @@ public class PaintingRecipeCategory implements IRecipeCategory<PaintingRecipeWra
         title = I18n.format("millenairejei.paintingrecipes.tabtitle");
         background = guiHelper.createBlankDrawable(100, 50);
         icon = guiHelper.createDrawableIngredient(ItemHelper.getStackFromResource(Constants.WHITEWASH_BUCKET));
-        arrow = GuiElementHelper.staticArrow(guiHelper);
+        arrow = UiHelper.staticArrow(guiHelper);
     }
     
     @Override

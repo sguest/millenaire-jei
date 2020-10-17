@@ -10,7 +10,7 @@ import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ResourceLocation;
 import sguest.millenairejei.jei.MillenaireJeiPlugin;
 import sguest.millenairejei.util.Constants;
-import sguest.millenairejei.util.GuiElementHelper;
+import sguest.millenairejei.util.UiHelper;
 import sguest.millenairejei.util.ItemHelper;
 
 public class DryingRecipeCategory implements IRecipeCategory<DryingRecipeWrapper> {
@@ -27,8 +27,8 @@ public class DryingRecipeCategory implements IRecipeCategory<DryingRecipeWrapper
             .setTextureSize(32, 32)
             .trim(4, 4, 4, 4)
             .build();
-        staticArrow = GuiElementHelper.staticArrow(guiHelper);
-        animatedArrow = GuiElementHelper.animatedArrow(guiHelper, 200);
+        staticArrow = UiHelper.staticArrow(guiHelper);
+        animatedArrow = UiHelper.animatedArrow(guiHelper, 200);
     }
     @Override
     public String getUid() {

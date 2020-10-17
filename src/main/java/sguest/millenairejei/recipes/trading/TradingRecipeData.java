@@ -3,23 +3,20 @@ package sguest.millenairejei.recipes.trading;
 import java.util.List;
 
 import net.minecraft.item.ItemStack;
+import sguest.millenairejei.recipes.IconWithLabel;
 
 public class TradingRecipeData {
     private final ItemStack tradeItem;
     private final int cost;
-    private final String cultureName;
-    private final ItemStack cultureIcon;
-    private final String villageName;
-    private final ItemStack villageIcon;
-    private final List<RecipeBuildingData> buildings;
+    private final IconWithLabel culture;
+    private final IconWithLabel village;
+    private final List<IconWithLabel> buildings;
 
-    public TradingRecipeData(ItemStack tradeItem, int cost, String cultureName, ItemStack cultureIcon, String villageName, ItemStack villageIcon, List<RecipeBuildingData> buildings) {
+    public TradingRecipeData(ItemStack tradeItem, int cost, IconWithLabel culture, IconWithLabel village, List<IconWithLabel> buildings) {
         this.tradeItem = tradeItem;
         this.cost = cost;
-        this.cultureName = cultureName;
-        this.cultureIcon = cultureIcon;
-        this.villageName = villageName;
-        this.villageIcon = villageIcon;
+        this.culture = culture;
+        this.village = village;
         this.buildings = buildings;
     }
 
@@ -31,23 +28,15 @@ public class TradingRecipeData {
         return cost;
     }
 
-    public String getCultureName() {
-        return cultureName;
+    public IconWithLabel getCulture() {
+        return culture;
     }
 
-    public ItemStack getCultureIcon() {
-        return cultureIcon;
+    public IconWithLabel getVillage() {
+        return village;
     }
 
-    public String getVillageName() {
-        return villageName;
-    }
-
-    public ItemStack getVillageIcon() {
-        return villageIcon;
-    }
-
-    public List<RecipeBuildingData> getBuildings() {
+    public List<IconWithLabel> getBuildings() {
         return buildings;
     }
 }

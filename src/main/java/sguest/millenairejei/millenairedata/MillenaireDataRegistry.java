@@ -10,6 +10,8 @@ import sguest.millenairejei.millenairedata.trading.BuildingLookup;
 import sguest.millenairejei.millenairedata.trading.ShopLookup;
 import sguest.millenairejei.millenairedata.trading.TradedGoodsLookup;
 import sguest.millenairejei.millenairedata.trading.VillageLookup;
+import sguest.millenairejei.millenairedata.villagercrafting.GoalLookup;
+import sguest.millenairejei.millenairedata.villagercrafting.VillagerLookup;
 
 public class MillenaireDataRegistry {
     private static MillenaireDataRegistry instance;
@@ -37,21 +39,27 @@ public class MillenaireDataRegistry {
         ItemLookup itemLookup = ItemLookup.getInstance();
 
         for(Path loadingRoot: loadingRoots) {
-            itemLookup.loadItems(loadingRoot);
+            try {
+                itemLookup.loadItems(loadingRoot);
+                GoalLookup.getInstance().loadGoals(loadingRoot);
 
-            Path culturesFolder = loadingRoot.resolve("cultures");
-            File[] cultureFiles = culturesFolder.toFile().listFiles();
-            for (File cultureFile : cultureFiles) {
-                if(cultureFile.isDirectory()) {
-                    String cultureKey = cultureFile.getName();
-                    Path culturePath = cultureFile.toPath();
-                    TradedGoodsLookup.getInstance().loadTradedGoods(cultureKey, culturePath);
-                    ShopLookup.getInstance().loadShopInfo(cultureKey, culturePath);
-                    LanguageLookup.getInstance().loadLanguageData(cultureKey, loadingRoot);
-                    CultureDataLookup.getInstance().loadCultureData(cultureKey, culturePath);
-                    BuildingLookup.getInstance().loadData(cultureKey, culturePath);
-                    VillageLookup.getInstance().LoadVillages(cultureKey, culturePath);
+                Path culturesFolder = loadingRoot.resolve("cultures");
+                File[] cultureFiles = culturesFolder.toFile().listFiles();
+                for (File cultureFile : cultureFiles) {
+                    if(cultureFile.isDirectory()) {
+                        String cultureKey = cultureFile.getName();
+                        Path culturePath = cultureFile.toPath();
+                        TradedGoodsLookup.getInstance().loadTradedGoods(cultureKey, culturePath);
+                        ShopLookup.getInstance().loadShopInfo(cultureKey, culturePath);
+                        LanguageLookup.getInstance().loadLanguageData(cultureKey, loadingRoot);
+                        CultureDataLookup.getInstance().loadCultureData(cultureKey, culturePath);
+                        BuildingLookup.getInstance().loadData(cultureKey, culturePath);
+                        VillageLookup.getInstance().LoadVillages(cultureKey, culturePath);
+                        VillagerLookup.getInstance().loadVillagers(cultureKey, culturePath);
+                    }
                 }
+            } catch(Exception ex) {
+                MillenaireJei.getLogger().error("Error loading millenaire data from " + loadingRoot, ex);
             }
         }
     }

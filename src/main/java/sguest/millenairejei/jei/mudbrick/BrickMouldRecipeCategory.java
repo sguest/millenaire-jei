@@ -12,7 +12,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import sguest.millenairejei.jei.MillenaireJeiPlugin;
 import sguest.millenairejei.util.Constants;
-import sguest.millenairejei.util.GuiElementHelper;
+import sguest.millenairejei.util.UiHelper;
 import sguest.millenairejei.util.ItemHelper;
 
 public class BrickMouldRecipeCategory implements IRecipeCategory<BrickMouldRecipeWrapper> {
@@ -23,7 +23,7 @@ public class BrickMouldRecipeCategory implements IRecipeCategory<BrickMouldRecip
     public BrickMouldRecipeCategory(IGuiHelper guiHelper) {
         title = I18n.format("millenairejei.brickmouldrecipes.tabtitle");
         background = guiHelper.createBlankDrawable(100, 50);
-        arrow = GuiElementHelper.staticArrow(guiHelper);
+        arrow = UiHelper.staticArrow(guiHelper);
     }
 
     @Override
