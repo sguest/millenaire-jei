@@ -8,6 +8,7 @@ import java.util.TreeMap;
 import com.google.common.collect.Lists;
 
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.FurnaceRecipes;
 import sguest.millenairejei.MillenaireJei;
 import sguest.millenairejei.millenairedata.CultureData;
 import sguest.millenairejei.millenairedata.CultureDataLookup;
@@ -22,9 +23,11 @@ import sguest.millenairejei.recipes.IconWithLabel;
 
 public class VillagerCraftingRecipeLookup {
     private final List<VillagerCraftingRecipeData> craftingRecipes;
+    private final List<VillagerCraftingRecipeData> cookingRecipes;
 
     public VillagerCraftingRecipeLookup() {
         craftingRecipes = new ArrayList<>();
+        cookingRecipes = new ArrayList<>();
     }
 
     public void BuildRecipes() {
@@ -99,6 +102,25 @@ public class VillagerCraftingRecipeLookup {
                             craftingRecipes.add(new VillagerCraftingRecipeData(inputs, outputs, culture, villagers));
                         }
                     }
+
+                    String cookingGoal = goalLookup.getCookingGoalInput(goalKey);
+                    if(cookingGoal != null) {
+                        List<ItemStack> inputs = new ArrayList<>();
+                        ItemStack inputItem = itemLookup.getItem(cookingGoal);
+                        if(inputItem != null) {
+                            inputs.add(inputItem);
+
+                            ItemStack outputItem = FurnaceRecipes.instance().getSmeltingResult(inputItem);
+                            if(outputItem != null) {
+                                List<ItemStack> outputs = new ArrayList<>();
+                                outputs.add(outputItem);
+
+                                for(List<IconWithLabel> villagers : Lists.partition(entry.getValue(), 4)) {
+                                    cookingRecipes.add(new VillagerCraftingRecipeData(inputs, outputs, culture, villagers));
+                                }
+                            }
+                        }
+                    }
                 }
             } catch (Exception ex) {
                 MillenaireJei.getLogger().error("Error loading villager crafting recipes for culture " + cultureKey, ex);
@@ -108,5 +130,9 @@ public class VillagerCraftingRecipeLookup {
 
     public List<VillagerCraftingRecipeData> getCraftingRecipes() {
         return craftingRecipes;
+    }
+
+    public List<VillagerCraftingRecipeData> getCookingRecipes() {
+        return cookingRecipes;
     }
 }

@@ -15,7 +15,8 @@ import sguest.millenairejei.util.DataFileHelper;
 public class GoalLookup {
     private static GoalLookup instance;
 
-    private Map<String, CraftingGoalData> craftingGoals;
+    private final Map<String, CraftingGoalData> craftingGoals;
+    private final Map<String, String> cookingGoals;
 
     public static GoalLookup getInstance() {
         if(instance == null) {
@@ -26,6 +27,7 @@ public class GoalLookup {
 
     private GoalLookup() {
         craftingGoals = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
+        cookingGoals = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
     }
 
     public void loadGoals(Path dataFolder) {
@@ -65,9 +67,31 @@ public class GoalLookup {
                 MillenaireJei.getLogger().error("Failed to load generic crafting goals from folder " + goalsFolder, ex);
             }
         }
+
+        Path cookingFolder = goalsFolder.resolve("genericcooking");
+        if(cookingFolder.toFile().exists()) {
+            try {
+                Files.walk(cookingFolder).filter(Files::isRegularFile).forEach(file -> {
+                    String key = FilenameUtils.getBaseName(file.toFile().getName());
+                    Map<String, List<String>> fileData = DataFileHelper.loadDataFile(file.toFile());
+                    if(fileData != null) {
+                        List<String> toCook = fileData.get("itemtocook");
+                        if(toCook != null) {
+                            cookingGoals.put(key, toCook.get(0));
+                        }
+                    }
+                });
+            } catch (IOException ex) {
+                MillenaireJei.getLogger().error("Failed to load generic crafting goals from folder " + goalsFolder, ex);
+            }
+        }
     }
 
     public CraftingGoalData getCrafingGoal(String key) {
         return craftingGoals.get(key);
+    }
+
+    public String getCookingGoalInput(String key) {
+        return cookingGoals.get(key);
     }
 }
