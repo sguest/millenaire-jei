@@ -7,8 +7,13 @@ import java.util.TreeMap;
 
 import com.google.common.collect.Lists;
 
+import net.minecraft.block.Block;
+import net.minecraft.block.properties.IProperty;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.FurnaceRecipes;
+import net.minecraft.util.ResourceLocation;
 import sguest.millenairejei.MillenaireJei;
 import sguest.millenairejei.millenairedata.CultureData;
 import sguest.millenairejei.millenairedata.CultureDataLookup;
@@ -17,6 +22,7 @@ import sguest.millenairejei.millenairedata.ItemLookup;
 import sguest.millenairejei.millenairedata.LanguageLookup;
 import sguest.millenairejei.millenairedata.villagercrafting.CraftingGoalData;
 import sguest.millenairejei.millenairedata.villagercrafting.GoalLookup;
+import sguest.millenairejei.millenairedata.villagercrafting.HarvestGoalData;
 import sguest.millenairejei.millenairedata.villagercrafting.VillagerData;
 import sguest.millenairejei.millenairedata.villagercrafting.VillagerLookup;
 import sguest.millenairejei.recipes.IconWithLabel;
@@ -24,10 +30,12 @@ import sguest.millenairejei.recipes.IconWithLabel;
 public class VillagerCraftingRecipeLookup {
     private final List<VillagerCraftingRecipeData> craftingRecipes;
     private final List<VillagerCraftingRecipeData> cookingRecipes;
+    private final List<VillagerCraftingRecipeData> harvestRecipes;
 
     public VillagerCraftingRecipeLookup() {
         craftingRecipes = new ArrayList<>();
         cookingRecipes = new ArrayList<>();
+        harvestRecipes = new ArrayList<>();
     }
 
     public void BuildRecipes() {
@@ -121,6 +129,56 @@ public class VillagerCraftingRecipeLookup {
                             }
                         }
                     }
+
+                    HarvestGoalData harvestGoal = goalLookup.getHarvestGoal(goalKey);
+                    if(harvestGoal != null) {
+                        List<ItemStack> inputs = new ArrayList<>();
+                        if(harvestGoal.getHarvestBlockState() != null) {
+                            String[] stateParts = harvestGoal.getHarvestBlockState().split(";", 2);
+                            Block harvestBlock = Block.REGISTRY.getObject(new ResourceLocation(stateParts[0]));
+                            Item item = Item.getItemFromBlock(harvestBlock);
+
+                            if(item.getHasSubtypes()) {
+                                IBlockState blockState = harvestBlock.getBlockState().getBaseState();
+                                if(stateParts.length == 2) {
+                                    String[] stateItems = stateParts[1].split(",");
+                                    Map<String, String> stateValues = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
+                                    for(String stateItem : stateItems) {
+                                        String[] itemParts = stateItem.split("=", 2);
+                                        if(itemParts.length == 2) {
+                                            stateValues.put(itemParts[0], itemParts[1]);
+                                        }
+                                    }
+
+                                    for(IProperty<?> property : blockState.getPropertyKeys()) {
+                                        String propertyName = property.getName();
+                                        if(stateValues.containsKey(propertyName)) {
+                                            blockState = blockStateSetHelper(blockState, property, stateValues.get(propertyName));
+                                        }
+                                    }
+                                }
+
+                                int meta = harvestBlock.getMetaFromState(blockState);
+                                inputs.add(new ItemStack(Item.getItemFromBlock(harvestBlock), 1, meta));
+                            }
+                            else {
+                                inputs.add(new ItemStack(Item.getItemFromBlock(harvestBlock)));
+                            }
+                        }
+                        else if(harvestGoal.getCropType() != null) {
+                            Block harvestBlock = Block.REGISTRY.getObject(new ResourceLocation(harvestGoal.getCropType()));
+                            inputs.add(new ItemStack(Item.getItemFromBlock(harvestBlock)));
+                        }
+
+                        List<ItemStack> outputs = new ArrayList<>();
+                        for(String output : harvestGoal.getOutputs()) {
+                            outputs.add(itemLookup.getItem(output));
+                        }
+
+                        for(List<IconWithLabel> villagers : Lists.partition(entry.getValue(), 4)) {
+                            harvestRecipes.add(new VillagerCraftingRecipeData(inputs, outputs, culture, villagers));
+                        }
+                    }
                 }
             } catch (Exception ex) {
                 MillenaireJei.getLogger().error("Error loading villager crafting recipes for culture " + cultureKey, ex);
@@ -134,5 +192,17 @@ public class VillagerCraftingRecipeLookup {
 
     public List<VillagerCraftingRecipeData> getCookingRecipes() {
         return cookingRecipes;
+    }
+
+    public List<VillagerCraftingRecipeData> getHarvestRecipes() {
+        return harvestRecipes;
+    }
+
+    private <T extends Comparable<T>> IBlockState blockStateSetHelper(IBlockState blockState, IProperty<T> property, String value) {
+        com.google.common.base.Optional<T> propertyValue = property.parseValue(value);
+        if(propertyValue.isPresent()) {
+            blockState = blockState.withProperty(property, propertyValue.get());
+        }
+        return blockState;
     }
 }
