@@ -11,6 +11,7 @@ import java.util.TreeMap;
 import org.apache.commons.io.FilenameUtils;
 
 import sguest.millenairejei.MillenaireJei;
+import sguest.millenairejei.util.AnimalHelper;
 import sguest.millenairejei.util.DataFileHelper;
 
 public class GoalLookup {
@@ -19,6 +20,7 @@ public class GoalLookup {
     private final Map<String, CraftingGoalData> craftingGoals;
     private final Map<String, String> cookingGoals;
     private final Map<String, HarvestGoalData> harvestGoals;
+    private final Map<String, SlaughterGoalData> slaughterGoals;
 
     public static GoalLookup getInstance() {
         if(instance == null) {
@@ -31,6 +33,7 @@ public class GoalLookup {
         craftingGoals = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
         cookingGoals = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
         harvestGoals = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
+        slaughterGoals = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
     }
 
     public void loadGoals(Path dataFolder) {
@@ -109,7 +112,34 @@ public class GoalLookup {
                     }
                 });
             } catch (IOException ex) {
-                MillenaireJei.getLogger().error("Failed to load cooking goals from folder " + goalsFolder, ex);
+                MillenaireJei.getLogger().error("Failed to load mining goals from folder " + goalsFolder, ex);
+            }
+        }
+
+        Path slaughterFolder = goalsFolder.resolve("genericslaughteranimal");
+        if(slaughterFolder.toFile().exists()) {
+            try {
+                Files.walk(slaughterFolder).filter(Files::isRegularFile).forEach(file -> {
+                    String key = FilenameUtils.getBaseName(file.toFile().getName());
+                    Map<String, List<String>> fileData = DataFileHelper.loadDataFile(file.toFile());
+                    if(fileData != null) {
+                        if(fileData.containsKey("animalkey")) {
+                            String animal = fileData.get("animalKey").get(0);
+                            List<String> outputs = AnimalHelper.getPassiveMobDrops(animal);
+                            if(fileData.containsKey("bonusitem")) {
+                                for(String bonusItem : fileData.get("bonusitem")) {
+                                    String item = bonusItem.split(",")[0];
+                                    if(!outputs.contains(item)) {
+                                        outputs.add(item);
+                                    }
+                                }
+                            }
+                            slaughterGoals.put(key, new SlaughterGoalData(animal, outputs));
+                        }
+                    }
+                });
+            } catch (IOException ex) {
+                MillenaireJei.getLogger().error("Failed to load slaughter goals from folder " + goalsFolder, ex);
             }
         }
     }
@@ -124,6 +154,10 @@ public class GoalLookup {
 
     public HarvestGoalData getHarvestGoal(String key) {
         return harvestGoals.get(key);
+    }
+
+    public SlaughterGoalData getSlaugherGoal(String key) {
+        return slaughterGoals.get(key);
     }
 
     private void loadHarvestGoals(Path loadingFolder) {

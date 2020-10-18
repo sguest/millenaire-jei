@@ -1,5 +1,6 @@
 package sguest.millenairejei.recipes.villagercrafting;
 
+import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -10,10 +11,14 @@ import com.google.common.collect.Lists;
 import net.minecraft.block.Block;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.Minecraft;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityList;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.World;
 import sguest.millenairejei.MillenaireJei;
 import sguest.millenairejei.millenairedata.CultureData;
 import sguest.millenairejei.millenairedata.CultureDataLookup;
@@ -23,6 +28,7 @@ import sguest.millenairejei.millenairedata.LanguageLookup;
 import sguest.millenairejei.millenairedata.villagercrafting.CraftingGoalData;
 import sguest.millenairejei.millenairedata.villagercrafting.GoalLookup;
 import sguest.millenairejei.millenairedata.villagercrafting.HarvestGoalData;
+import sguest.millenairejei.millenairedata.villagercrafting.SlaughterGoalData;
 import sguest.millenairejei.millenairedata.villagercrafting.VillagerData;
 import sguest.millenairejei.millenairedata.villagercrafting.VillagerLookup;
 import sguest.millenairejei.recipes.IconWithLabel;
@@ -31,11 +37,13 @@ public class VillagerCraftingRecipeLookup {
     private final List<VillagerCraftingRecipeData> craftingRecipes;
     private final List<VillagerCraftingRecipeData> cookingRecipes;
     private final List<VillagerCraftingRecipeData> harvestRecipes;
+    private final List<VillagerSlaughterRecipeData> slaughterRecipes;
 
     public VillagerCraftingRecipeLookup() {
         craftingRecipes = new ArrayList<>();
         cookingRecipes = new ArrayList<>();
         harvestRecipes = new ArrayList<>();
+        slaughterRecipes = new ArrayList<>();
     }
 
     public void BuildRecipes() {
@@ -179,6 +187,27 @@ public class VillagerCraftingRecipeLookup {
                             harvestRecipes.add(new VillagerCraftingRecipeData(inputs, outputs, culture, villagers));
                         }
                     }
+
+                    SlaughterGoalData slaughterGoal = goalLookup.getSlaugherGoal(goalKey);
+                    if(slaughterGoal != null) {
+                        Class<? extends Entity> entityClass = EntityList.getClassFromName(slaughterGoal.getAnimal());
+                        Entity entity = getEntity(entityClass);
+                        String animalName = "";
+                        if(entity != null) {
+                            animalName = entity.getName();
+                        }
+                        List<ItemStack> outputs = new ArrayList<>();
+                        for(String bonusItem : slaughterGoal.getBonusItems()) {
+                            ItemStack item = itemLookup.getItem(bonusItem);
+                            if(item != null) {
+                                outputs.add(item);
+                            }
+                        }
+
+                        for(List<IconWithLabel> villagers : Lists.partition(entry.getValue(), 4)) {
+                            slaughterRecipes.add(new VillagerSlaughterRecipeData(animalName, outputs, culture, villagers));
+                        }
+                    }
                 }
             } catch (Exception ex) {
                 MillenaireJei.getLogger().error("Error loading villager crafting recipes for culture " + cultureKey, ex);
@@ -198,11 +227,24 @@ public class VillagerCraftingRecipeLookup {
         return harvestRecipes;
     }
 
+    public List<VillagerSlaughterRecipeData> getSlaughterRecipes() {
+        return slaughterRecipes;
+    }
+
     private <T extends Comparable<T>> IBlockState blockStateSetHelper(IBlockState blockState, IProperty<T> property, String value) {
         com.google.common.base.Optional<T> propertyValue = property.parseValue(value);
         if(propertyValue.isPresent()) {
             blockState = blockState.withProperty(property, propertyValue.get());
         }
         return blockState;
+    }
+
+    private <T extends Entity> Entity getEntity(Class<T> entityClass) {
+        try {
+        Constructor<T> constructor = entityClass.getConstructor(World.class);
+            return constructor.newInstance(Minecraft.getMinecraft().world);
+        } catch (ReflectiveOperationException | RuntimeException ex) {
+            return null;
+        }
     }
 }
