@@ -6,6 +6,7 @@ import mezz.jei.api.IModRegistry;
 import mezz.jei.api.JEIPlugin;
 import mezz.jei.api.recipe.IRecipeCategoryRegistration;
 import sguest.millenairejei.MillenaireJei;
+import sguest.millenairejei.config.ModConfig;
 import sguest.millenairejei.jei.mudbrick.BrickMouldRecipeCategory;
 import sguest.millenairejei.jei.mudbrick.BrickMouldRecipeWrapper;
 import sguest.millenairejei.jei.mudbrick.DryingRecipeCategory;
@@ -75,26 +76,47 @@ public class MillenaireJeiPlugin implements IModPlugin {
         TradingRecipeLookup tradingLookup = new TradingRecipeLookup();
         tradingLookup.buildRecipes();
 
-        registry.addRecipes(tradingLookup.getBuyingRecipes(), BUYING);
-        registry.addRecipes(tradingLookup.getSellingRecipes(), SELLING);
+        if(ModConfig.showBuyingRecipes) {
+            registry.addRecipes(tradingLookup.getBuyingRecipes(), BUYING);
+        }
 
-        PaintingRecipeLookup paintingLookup = new PaintingRecipeLookup();
-        paintingLookup.buildRecipes();
+        if(ModConfig.showSellingRecipes) {
+            registry.addRecipes(tradingLookup.getSellingRecipes(), SELLING);
+        }
 
-        registry.addRecipes(paintingLookup.getRecipes(), PAINTING);
+        if(ModConfig.showPaintingRecipes) {
+            PaintingRecipeLookup paintingLookup = new PaintingRecipeLookup();
+            paintingLookup.buildRecipes();
 
-        registry.addRecipes(Collections.singletonList(new EmptyRecipeData()), BRICK_MOULD);
-        registry.addRecipes(Collections.singletonList(new EmptyRecipeData()), DRYING);
+            registry.addRecipes(paintingLookup.getRecipes(), PAINTING);
+        }
+
+        if(ModConfig.showBrickMouldRecipes) {
+            registry.addRecipes(Collections.singletonList(new EmptyRecipeData()), BRICK_MOULD);
+        }
+        if(ModConfig.showDryingRecipes) {
+            registry.addRecipes(Collections.singletonList(new EmptyRecipeData()), DRYING);
+        }
 
         VillagerCraftingRecipeLookup villagerCraftingLookup = new VillagerCraftingRecipeLookup();
         villagerCraftingLookup.BuildRecipes();
 
-        registry.addRecipes(villagerCraftingLookup.getCraftingRecipes(), VILLAGER_CRAFTING);
-        registry.addRecipes(villagerCraftingLookup.getCookingRecipes(), VILLAGER_COOKING);
-        registry.addRecipes(villagerCraftingLookup.getHarvestRecipes(), VILLAGER_HARVESTING);
-        registry.addRecipes(villagerCraftingLookup.getSlaughterRecipes(), VILLAGER_SLAUGHTERING);
+        if(ModConfig.showVillagerCraftingRecipes) {
+            registry.addRecipes(villagerCraftingLookup.getCraftingRecipes(), VILLAGER_CRAFTING);
+        }
+        if(ModConfig.showVillagerCookingRecipes) {
+            registry.addRecipes(villagerCraftingLookup.getCookingRecipes(), VILLAGER_COOKING);
+        }
+        if(ModConfig.showVillagerHarvestingRecipes) {
+            registry.addRecipes(villagerCraftingLookup.getHarvestRecipes(), VILLAGER_HARVESTING);
+        }
+        if(ModConfig.showVillagerSlaughteringRecipes) {
+            registry.addRecipes(villagerCraftingLookup.getSlaughterRecipes(), VILLAGER_SLAUGHTERING);
+        }
 
-        JeiBlacklist.blacklistItems(registry.getJeiHelpers().getIngredientBlacklist());
+        if(ModConfig.hideTechnicalItems) {
+            JeiBlacklist.blacklistItems(registry.getJeiHelpers().getIngredientBlacklist());
+        }
     }
 
     @Override
